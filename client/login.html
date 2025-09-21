@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+      <title>Login</title>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+      <style>
+        body {
+          font-family: 'Inter', 'Arial', sans-serif;
+          margin: 0;
+          background: linear-gradient(135deg, #c3d9f0, #8ebbdb, #a6c1de);
+          min-height: 100vh;
+        }
+
+        .navbar {
+          background: linear-gradient(135deg, #f0f4f8, #d9e4ec, #a6c1de);
+          box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .navbar-nav {
+          margin-left: auto;
+          display: flex;
+          align-items: center;
+        }
+        .navbar-nav .nav-item {
+          margin-left: 18px;
+        }
+        .navbar-brand img {
+          max-width: 80px;
+          max-height: 80px;
+          margin-left: 20px;
+        }
+
+        .login-bg {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 90vh;
+          background: none;
+        }
+
+        .login-container {
+          width: 100%;
+          max-width: 400px;
+          background: #fff;
+          border-radius: 16px;
+          box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+          padding: 40px 32px 32px 32px;
+          position: relative;
+          animation: fadeIn 1s ease-in-out;
+        }
+        .login-container:before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(135deg, #c3d9f0 0%, #8ebbdb 100%);
+          opacity: 0.08;
+          z-index: -1;
+          border-radius: 16px;
+        }
+        .login-container h2 {
+          text-align: center;
+          margin-bottom: 32px;
+          font-weight: 700;
+          color: #187bff;
+          letter-spacing: 1px;
+        }
+        .login-form {
+          display: flex;
+          flex-direction: column;
+          gap: 18px;
+        }
+        .form-group label {
+          font-weight: 500;
+          margin-bottom: 6px;
+          color: #333;
+        }
+        .form-group input {
+          width: 100%;
+          padding: 12px;
+          border: 1px solid #bcd0ee;
+          border-radius: 6px;
+          box-sizing: border-box;
+          font-size: 15px;
+          background: #f7faff;
+          transition: border-color 0.2s;
+        }
+        .form-group input:focus {
+          border-color: #187bff;
+          outline: none;
+        }
+        input[type="submit"] {
+          background: linear-gradient(135deg, #187bff, #145b9c);
+          color: #fff;
+          border: none;
+          padding: 14px;
+          border-radius: 6px;
+          cursor: pointer;
+          font-size: 16px;
+          font-weight: 600;
+          box-shadow: 0 2px 8px rgba(24,123,255,0.08);
+          transition: background 0.3s;
+        }
+        input[type="submit"]:hover {
+          background: linear-gradient(135deg, #145b9c, #187bff);
+        }
+        .form-group a {
+          color: #187bff;
+          text-decoration: none;
+          font-weight: 500;
+        }
+        .form-group a:hover {
+          text-decoration: underline;
+        }
+        .login-footer {
+          text-align: center;
+          margin-top: 24px;
+          color: #888;
+          font-size: 14px;
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+      </style>
+        
+        
+    </header>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <a class="navbar-brand" href="index.html"><img src="img/logo.png" alt="Logo"></a>
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+      <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+      <li class="nav-item"><a class="nav-link" href="Donate.html">Donate</a></li>
+      <li class="nav-item"><a class="nav-link" href="blogs.html">Blogs</a></li>
+      <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+      <li class="nav-item"><a class="nav-link active" href="login.html">Login</a></li>
+      <li class="nav-item"><a class="nav-link text-danger" href="admin.html">Admin</a></li>
+    </ul>
+  </nav>
+
+  <div class="login-bg">
+    <div class="login-container">
+      <h2>Login</h2>
+      <form id="loginForm" class="login-form">
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" required autocomplete="off" />
+        </div>
+        <div class="form-group">
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password" required autocomplete="off" />
+        </div>
+        <div class="form-group">
+          <input type="submit" value="Login" />
+        </div>
+        <div class="form-group" style="text-align:center;">
+          <span>Don't have an account? <a href="/register.html">Register</a></span>
+        </div>
+      </form>
+      <div class="login-footer">
+        &copy; 2025 FeedLink. All rights reserved.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("loginForm");
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const email = form.email.value;
+        const password = form.password.value;
+        try {
+          const res = await fetch("/api/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password })
+          });
+          const data = await res.json();
+          if (!data.success) {
+            // Show error below form
+            showError(data.message || "❌ Login failed");
+            return;
+          }
+          localStorage.setItem("token", data.token);
+          showSuccess("✅ Login successful! Redirecting...");
+          setTimeout(() => {
+            window.location.href = "/Donate.html";
+          }, 1200);
+        } catch (err) {
+          showError("Network error. Please try again.");
+        }
+      });
+
+      function showError(msg) {
+        let errDiv = document.getElementById("loginError");
+        if (!errDiv) {
+          errDiv = document.createElement("div");
+          errDiv.id = "loginError";
+          errDiv.style.color = "#d32f2f";
+          errDiv.style.textAlign = "center";
+          errDiv.style.marginTop = "10px";
+          document.querySelector(".login-container").appendChild(errDiv);
+        }
+        errDiv.textContent = msg;
+      }
+      function showSuccess(msg) {
+        let errDiv = document.getElementById("loginError");
+        if (!errDiv) {
+          errDiv = document.createElement("div");
+          errDiv.id = "loginError";
+          errDiv.style.color = "#388e3c";
+          errDiv.style.textAlign = "center";
+          errDiv.style.marginTop = "10px";
+          document.querySelector(".login-container").appendChild(errDiv);
+        }
+        errDiv.textContent = msg;
+      }
+    });
+  </script>
+</body>
+
+</html>

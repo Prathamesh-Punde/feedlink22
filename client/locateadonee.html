@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Locate Donees - FeedLink</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="index.html"><img src="img/logo.png" alt="Logo" class="logo"></a>
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+      <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+      <li class="nav-item"><a class="nav-link" href="Donate.html">Donate</a></li>
+      <li class="nav-item"><a class="nav-link" href="blogs.html">Blogs</a></li>
+      <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+      <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
+      <li class="nav-item"><a class="nav-link text-danger" href="admin.html">Admin</a></li>
+    </ul>
+  </header>
+
+  <div class="container mt-5">
+    <h1 class="text-center mb-4">Donees Near You</h1>
+    <div class="alert alert-info text-center" id="status">Locating...</div>
+    <div id="list" class="row"></div>
+  </div>
+
+  <script>
+    async function fetchNearby(lat, lng) {
+      try {
+        const res = await fetch(`/api/donees/near?lat=${lat}&lng=${lng}&dist=5000`);
+        const donees = await res.json();
+        const list = document.getElementById('list');
+        const status = document.getElementById('status');
+        list.innerHTML = '';
+
+        if (!donees.length) {
+          status.className = 'alert alert-warning text-center';
+          status.textContent = 'No nearby donees found.';
+          return;
+        }
+        
+        status.className = 'alert alert-success text-center';
+        status.textContent = `Found ${donees.length} nearby donee(s):`;
+
+        donees.forEach(d => {
+          const div = document.createElement('div');
+          div.className = 'col-md-6 mb-3';
+          div.innerHTML = `
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">${d.name}</h5>
+                <p class="card-text">
+                  <strong>Address:</strong> ${d.address || 'N/A'}<br>
+                  <strong>Contact:</strong> <a href="tel:${d.contact || ''}" class="text-primary">${d.contact || 'N/A'}</a><br>
+                  <strong>Beneficiaries:</strong> ${d.beneficiaries || 0}
+                </p>
+                <a href="tel:${d.contact || ''}" class="btn btn-primary ${!d.contact ? 'disabled' : ''}">
+                  📞 Call Now
+                </a>
+              </div>
+            </div>
+          `;
+          list.appendChild(div);
+        });
+      } catch (error) {
+        document.getElementById('status').className = 'alert alert-danger text-center';
+        document.getElementById('status').textContent = 'Error loading donees: ' + error.message;
+      }
+    }
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        pos => fetchNearby(pos.coords.latitude, pos.coords.longitude),
+        err => {
+          document.getElementById('status').className = 'alert alert-danger text-center';
+          document.getElementById('status').textContent = 'Location error: ' + err.message;
+        }
+      );
+    } else {
+      document.getElementById('status').className = 'alert alert-danger text-center';
+      document.getElementById('status').textContent = 'Geolocation not supported by your browser.';
+    }
+  </script>
+</body>
+</html>

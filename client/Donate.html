@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donation Page</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: white;
+        }
+
+        header {
+            background: linear-gradient(135deg, #f0f4f8, #d9e4ec, #a6c1de);
+
+        }
+
+
+        .navbar-brand .logo {
+            max-width: 100px;
+            max-height: 100px;
+            margin-left: 60px;
+        }
+
+
+        .hero-section {
+            background: rgba(0, 0, 0, 0.5);
+            background-image: url("img/donation_Background.png");
+            background-size: cover;
+            background-position: center;
+            padding: 100px 20px;
+            text-align: center;
+            color: white;
+        }
+
+        .hero-section h2 {
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
+
+        .hero-section p {
+            font-size: 22px;
+            margin-bottom: 30px;
+        }
+
+        .hero-section button {
+            background-color: #00CED1;
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            border-radius: 5px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .hero-section button:hover {
+            background-color: #00CED1;
+        }
+
+        .donation-options {
+            display: flex;
+            justify-content: space-around;
+            margin: 50px 0;
+            padding: 0 20px;
+            color: black;
+        }
+
+        .donation-stage {
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #333;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            width: 30%;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .donation-stage:hover {
+            transform: scale(1.05);
+        }
+
+        .donation-stage img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .donation-stage h3 {
+            font-size: 28px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .donation-stage p {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .counter {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        /* Counter Buttons Styling */
+        .counter .inc-btn,
+        .counter .dec-btn {
+            background-color: #00CED1;
+            /* Set to your desired color */
+            color: white;
+            border: none;
+            font-size: 18px;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .counter .inc-btn:hover,
+        .counter .dec-btn:hover {
+            background-color: #00CED1;
+            /* Darker shade on hover */
+        }
+
+        .counter input {
+            width: 50px;
+            text-align: center;
+            font-size: 18px;
+            margin: 0 10px;
+        }
+
+        .donation-stage button {
+            background-color: #00CED1;
+            color: white;
+            padding: 15px 30px;
+            font-size: 20px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            /* Space between donate button and counter */
+        }
+
+        .donation-stage button:hover {
+            background-color: #00CED1;
+        }
+
+        /* Pay Button Styling */
+        .pay-btn {
+            background-color: #00CED1;
+            /* Green color */
+            color: black;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            display: none;
+            /* Initially hidden */
+            margin: 10px auto;
+            /* Center alignment */
+            width: 100%;
+            /* Full width button */
+        }
+
+        .pay-btn:hover {
+            background-color: #00CED1;
+            /* Darker shade on hover */
+        }
+
+        /* Amount Color and Size */
+        .donation-stage p.amount {
+            color: #188dd8;
+            /* Set to the desired color for amount */
+            font-weight: bold;
+            font-size: 35px;
+            /* Increased font size for amount */
+        }
+    </style>
+
+    <script>
+        // Initialize donation amounts
+        let smallDonation = 50;
+        let mediumDonation = 100;
+        let largeDonation = 200;
+
+        let smallQuantity = 1;
+        let mediumQuantity = 1;
+        let largeQuantity = 1;
+
+        // Function to toggle counter visibility and reset amounts
+        function showCounter(stage) {
+            let counter = document.getElementById(stage + '-counter');
+            let payButton = document.getElementById(stage + '-pay');
+            let quantityInput = document.getElementById(stage + '-quantity');
+            let priceElement = document.getElementById(stage + '-price');
+
+            if (counter.style.display === 'flex') {
+                counter.style.display = 'none';
+                payButton.style.display = 'none'; // Hide pay button
+                quantityInput.value = 1; // Reset quantity
+                priceElement.textContent = 'Rs. ' + (stage === 'small' ? smallDonation : stage === 'medium' ? mediumDonation : largeDonation);
+            } else {
+                counter.style.display = 'flex';
+                payButton.style.display = 'block'; // Show pay button
+                priceElement.textContent = 'Rs. ' + (stage === 'small' ? smallDonation : stage === 'medium' ? mediumDonation : largeDonation);
+            }
+        }
+
+        // Function to update quantity and donation amount
+        function updateAmount(stage) {
+            let quantityInput = document.getElementById(stage + '-quantity');
+            let priceElement = document.getElementById(stage + '-price');
+            let quantity = 1;
+            let amount = 0;
+
+            if (stage === 'small') {
+                smallQuantity = parseInt(quantityInput.value);
+                amount = smallDonation * smallQuantity;
+            } else if (stage === 'medium') {
+                mediumQuantity = parseInt(quantityInput.value);
+                amount = mediumDonation * mediumQuantity;
+            } else if (stage === 'large') {
+                largeQuantity = parseInt(quantityInput.value);
+                amount = largeDonation * largeQuantity;
+            }
+
+            priceElement.textContent = 'Rs. ' + amount;
+        }
+
+        // Increment and decrement functions for each donation stage
+        function increment(stage) {
+            let quantityInput = document.getElementById(stage + '-quantity');
+            quantityInput.value = parseInt(quantityInput.value) + 1;
+            updateAmount(stage);
+        }
+
+        function decrement(stage) {
+            let quantityInput = document.getElementById(stage + '-quantity');
+            if (quantityInput.value > 1) {
+                quantityInput.value = parseInt(quantityInput.value) - 1;
+                updateAmount(stage);
+            }
+        }
+
+        // Function to handle payment action
+        function pay(stage) {
+            const amount = document.getElementById(stage + '-price').textContent.replace('Rs. ', '').trim();
+            window.location.href = `payment.html?amount=${amount}`;
+        }
+
+        // Function for slow scroll to donation section
+        function slowScrollToDonationOptions() {
+            let donationOptions = document.getElementById('donation-options');
+            let position = window.pageYOffset;
+            let targetPosition = donationOptions.offsetTop;
+            let distance = targetPosition - position;
+            let duration = 1000; // Slow down by increasing the duration (1000ms = 1 second)
+            let startTime = null;
+
+            function animationScroll(currentTime) {
+                if (startTime === null) startTime = currentTime;
+                let timeElapsed = currentTime - startTime;
+                let scrollAmount = easeInOutQuad(timeElapsed, position, distance, duration);
+                window.scrollTo(0, scrollAmount);
+                if (timeElapsed < duration) requestAnimationFrame(animationScroll);
+            }
+
+            function easeInOutQuad(t, b, c, d) {
+                t /= d / 2;
+                if (t < 1) return c / 2 * t * t + b;
+                t--;
+                return -c / 2 * (t * (t - 2) - 1) + b;
+            }
+
+            requestAnimationFrame(animationScroll);
+        }
+    </script>
+
+</head>
+
+<body>
+
+    <!-- Header Section -->
+    <header class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="index.html"><img src="img/logo.png" alt="Logo" class="logo"></a>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+            <li class="nav-item"><a class="nav-link" href="Donate.html">Donate</a></li>
+            <li class="nav-item"><a class="nav-link" href="blogs.html">Blogs</a></li>
+            <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+            <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
+            <li class="nav-item"><a class="nav-link text-danger" href="admin.html">Admin</a></li>
+        </ul>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <h2>Your donation can fill someone stomach today</h2>
+        <p>Your small contribution can make a huge difference in someone's life.</p>
+        <button onclick="slowScrollToDonationOptions()">Donate Now</button>
+    </section>
+
+    <!-- Donation Options Section -->
+    <section id="donation-options" class="donation-options">
+        <!-- Small Donation Stage -->
+        <div class="donation-stage">
+            <img src="img/small.png" alt="Small Donation">
+            <h3>Small Donation</h3>
+            <p>Your donation of Rs. 50 will help provide meals to a person in need.</p>
+            <p id="small-price" class="amount">Rs. 50</p>
+            <button onclick="showCounter('small')">Donate Now</button>
+
+            <div id="small-counter" class="counter">
+                <button class="dec-btn" onclick="decrement('small')">-</button>
+                <input type="text" id="small-quantity" value="1" readonly>
+                <button class="inc-btn" onclick="increment('small')">+</button>
+            </div>
+
+            <button id="small-pay" class="pay-btn" onclick="pay('small')">PAY NOW</button>
+        </div>
+
+        <!-- Medium Donation Stage -->
+        <div class="donation-stage">
+            <img src="img/medium.png" alt="Medium Donation">
+            <h3>Medium Donation</h3>
+            <p>Your donation of Rs. 100 will help provide meals to two people.</p>
+            <p id="medium-price" class="amount">Rs. 100</p>
+            <button onclick="showCounter('medium')">Donate Now</button>
+
+            <div id="medium-counter" class="counter">
+                <button class="dec-btn" onclick="decrement('medium')">-</button>
+                <input type="text" id="medium-quantity" value="1" readonly>
+                <button class="inc-btn" onclick="increment('medium')">+</button>
+            </div>
+
+            <button id="medium-pay" class="pay-btn" onclick="pay('medium')">PAY NOW</button>
+        </div>
+
+        <!-- Large Donation Stage -->
+        <div class="donation-stage">
+            <img src="img/large.png" alt="Large Donation">
+            <h3>Large Donation</h3>
+            <p>Your donation of Rs. 200 will help provide meals to a community.</p>
+            <p id="large-price" class="amount">Rs. 200</p>
+            <button onclick="showCounter('large')">Donate Now</button>
+
+            <div id="large-counter" class="counter">
+                <button class="dec-btn" onclick="decrement('large')">-</button>
+                <input type="text" id="large-quantity" value="1" readonly>
+                <button class="inc-btn" onclick="increment('large')">+</button>
+            </div>
+
+            <button id="large-pay" class="pay-btn" onclick="pay('large')">PAY NOW</button>
+        </div>
+    </section>
+
+</body>
+
+</html>

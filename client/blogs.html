@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FeedLink Blogs</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Background Styling */
+        body {
+            background: linear-gradient(135deg, #f0f8ff, #e0e4cc);
+            font-family: Arial, sans-serif;
+            position: relative; /* Set position for absolute elements */
+            padding: 0; /* Remove default padding */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+
+        /* Fade-in animation */
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 1.5s forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Decorative Side Elements */
+        .decorative-side {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 5%; /* Side element width */
+            background: rgba(0, 123, 255, 0.1); /* Light blue background */
+            z-index: -1; /* Position behind content */
+            border-radius: 20px; /* Rounded corners */
+        }
+
+        .left-side {
+            left: 0;
+        }
+
+        .right-side {
+            right: 0;
+        }
+
+        /* Responsive Blog Image */
+        .blog-image {
+            width: 100%;
+            max-width: 300px; /* Increased size */
+            height: auto;
+            object-fit: cover;
+            transition: transform 0.3s ease-in-out;
+            border-radius: 8px;
+        }
+
+        /* Blog Cards Styling */
+        .blog-card {
+            border-radius: 12px;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-bottom: 30px;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Blog Title and Content */
+        .blog-title {
+            color: #0056b3;
+            font-weight: bold;
+            transition: color 0.2s;
+        }
+
+        .blog-title:hover {
+            color: #003d80;
+            text-decoration: underline;
+        }
+
+        .blog-content {
+            color: #555;
+            font-size: 16px;
+            background-color: #f7f9fc; /* Light background for content */
+            padding: 15px; /* Padding around the text */
+            border-left: 5px solid #007bff; /* Left border for emphasis */
+            border-radius: 8px; /* Rounded corners */
+            margin-top: 10px; /* Spacing above content */
+        }
+
+        /* Section Heading */
+        #blog-section h3 {
+            color: #007bff;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Additional Style for Text */
+        .blog-card .nav-link {
+            text-decoration: none;
+            color: #0056b3;
+        }
+
+        .blog-card .nav-link:hover {
+            text-decoration: underline;
+            color: #003d80;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Decorative Side Elements -->
+    <div class="decorative-side left-side"></div>
+    <div class="decorative-side right-side"></div>
+
+    <!-- Header -->
+    <header class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="index.html"><img src="img/logo.png" alt="Logo" class="logo"></a>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+            <li class="nav-item"><a class="nav-link" href="Donate.html">Donate</a></li>
+            <li class="nav-item"><a class="nav-link" href="blogs.html">Blogs</a></li>
+            <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+            <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
+            <li class="nav-item"><a class="nav-link text-danger" href="admin.html">Admin</a></li>
+        </ul>
+    </header>
+
+    <!-- Blog Section -->
+    <section id="blog-section" class="container text-center mt-5 fade-in">
+        <h3>Our Latest Blogs</h3>
+
+        <!-- Blog 1: Image Left -->
+        <div class="row blog-card align-items-center">
+            <div class="col-md-4 text-center">
+                <img class="img-fluid blog-image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuP0hq62APhBHQvN0qiB4ay9p-5RZD85HmcA&s" alt="Blog 1 Image">
+            </div>
+            <div class="col-md-8 text-left">
+                <a class="nav-link" href="https://www.feedingindia.org/blog/">
+                    <h5 class="blog-title">Feeding India</h5>
+                </a>
+                <p class="blog-content">Feeding India, powered by Zomato, is dedicated to creating a hunger-free India through daily meal services for the underserved. This initiative strives to tackle food insecurity by redistributing surplus food to communities in need, thus helping minimize food wastage. In partnership with Zomato, Feeding India harnesses a vast network of volunteers, donors, and technology to provide meals, essential nutrition, and hope to countless individuals each day. Through this initiative, Zomato aims to bridge the gap between surplus food and those struggling with hunger, turning food that would otherwise go to waste into vital nourishment for the community.</p>
+            </div>
+        </div>
+
+        <!-- Blog 2: Image Right -->
+        <div class="row blog-card align-items-center">
+            <div class="col-md-8 text-left">
+                <a class="nav-link" href="https://www.misrii.com/blog/benefits-of-food-donation/">
+                    <h5 class="blog-title">Benefits Of Food Donation</h5>
+                </a>
+                <p class="blog-content">Food donation goes beyond charity—it’s a sustainable solution to reduce waste and uplift communities. This blog explores how contributing surplus food helps ensure meals for the underprivileged while promoting environmental health by minimizing food wastage. Discover the holistic impact of food donation and how you can be a part of this transformative movement towards a sustainable and inclusive society.</p>
+            </div>
+            <div class="col-md-4 text-center">
+                <img class="img-fluid blog-image" src="https://www.misrii.com/blog/wp-content/uploads/2019/05/donation.jpg" alt="Blog 2 Image">
+            </div>
+        </div>
+
+        <!-- Blog 3: Image Left -->
+        <div class="row blog-card align-items-center">
+            <div class="col-md-4 text-center">
+                <img class="img-fluid blog-image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTv2cbP-hqmzNP3IxRdUwaZ0i5ponSYdwxpbfXShOqztpM11UahAnj2La0P35ZeSXCULSc&usqp=CAU" alt="Blog 3 Image">
+            </div>
+            <div class="col-md-8 text-left">
+                <a class="nav-link" href="https://stopfoodwaste.org/blog">
+                    <h5 class="blog-title">Stop Food Waste</h5>
+                </a>
+                <p class="blog-content">Reducing food waste is a crucial step toward environmental conservation and hunger reduction. This blog sheds light on innovative strategies to cut down on food waste, from better storage techniques to mindful meal planning, highlighting how these efforts conserve resources, protect the environment, and address hunger. Learn practical steps and join the movement to turn wasted food into a lifeline for those in need.</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Trigger the fade-in animation once the page loads
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("blog-section").classList.add("fade-in");
+        });
+    </script>
+</body>
+
+</html>

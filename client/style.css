@@ -1,0 +1,80 @@
+p {
+
+    text-align: justify;
+    line-height: 1.6;
+    font-size: 16px;
+    font-family: 'Arial', sans-serif;
+    margin: 20px 0;
+    color: #333;
+    letter-spacing: 0.5px;
+    padding: 10px;
+ 
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+
+body {
+    background: linear-gradient(135deg, #f0f4f8, #d9e4ec, #a6c1de);
+}
+
+
+header {
+    background: linear-gradient(135deg, #f0f4f8, #d9e4ec, #a6c1de);
+ 
+}
+
+
+.navbar-brand .logo {
+    max-width: 100px;
+    max-height: 100px;
+    margin-left: 60px;
+}
+
+
+
+
+.ideas-section {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.ideas-section img {
+    max-width: 100%;
+    height: auto;
+    padding-right: 20px;
+}
+
+#volunteerForm .btn-primary,
+#volunteerForm .btn-secondary {
+    background-color: black;
+    
+}
+
+
+footer {
+    background: linear-gradient(135deg, #f0f4f8, #d9e4ec, #a6c1de);
+}
+
+footer p {
+    text-align: center;
+}
+
+
+.chatbot-icon {
+    width: 90px;
+    height: 90px;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    cursor: pointer;
+    border-radius: 50%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s;
+}
+
+.chatbot-icon:hover {
+    transform: scale(1.1);
+}

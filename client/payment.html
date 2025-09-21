@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="tailwindcss-colors.css">
+    <link rel="stylesheet" href="style.css">
+    <title>Payment Page</title>
+    <style>
+        /* Additional styles for visibility */
+        .hidden {
+            display: none;
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* start: Globals */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font: inherit;
+}
+body {
+    font-family: 'Inter', sans-serif;
+    color: var(--gray-900);
+    background-color: var(--gray-50);
+}
+.container {
+    max-width: 940px;
+    margin: 0 auto;
+    padding: 0 16px;
+}
+/* end: Globals */
+
+
+
+/* start: Payment */
+.payment-section {
+    padding: 48px 0;
+}
+.payment-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+.payment-header {
+    padding: 24px;
+    background-color: var(--indigo-500);
+    border-radius: 12px;
+    padding-bottom: 72px;
+}
+.payment-header-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: var(--indigo-600);
+    color: var(--white);
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+}
+.payment-header-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--white);
+    line-height: 1.4;
+    margin-bottom: 4px;
+}
+.payment-header-description {
+    font-size: 15px;
+    color: var(--gray-200);
+    line-height: 1.5;
+}
+.payment-content {
+    padding: 24px;
+    margin-top: -64px;
+    position: relative;
+}
+.payment-content::before {
+    content: '';
+    position: absolute;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 32px);
+    height: 16px;
+    border-radius: 4px;
+    background-color: var(--indigo-600);
+}
+.payment-body {
+    background-color: var(--white);
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, .05), inset 0 8px 0 rgba(0, 0, 0, .05);
+    position: relative;
+    padding-top: 8px;
+    overflow: hidden;
+}
+.payment-plan {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+}
+.payment-plan-type {
+    width: 40px;
+    height: 40px;
+    background-color: var(--indigo-500);
+    color: var(--white);
+    font-size: 13px;
+    font-weight: 600;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    margin-right: 8px;
+}
+.payment-plan-info {
+    width: 100%;
+    margin-right: 8px;
+    display: grid;
+}
+.payment-plan-info-name {
+    font-size: 13px;
+    color: var(--gray-400);
+    margin-bottom: 2px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.payment-plan-info-price {
+    font-weight: 600;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.payment-plan-change {
+    color: var(--blue-500);
+    font-size: 12px;
+    font-weight: 600;
+    text-underline-offset: 2px;
+}
+.payment-plan-change:hover {
+    color: var(--blue-600);
+}
+.payment-summary-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 12px;
+}
+.payment-summary-name {
+    font-size: 14px;
+    color: var(--gray-500);
+}
+.payment-summary-price {
+    font-weight: 500;
+    font-size: 15px;
+}
+.payment-summary-divider {
+    width: calc(100% - 16px);
+    height: 0;
+    margin: 12px auto;
+    border-bottom: 1px dashed var(--gray-200);
+    position: relative;
+}
+.payment-summary-divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 100%;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: var(--gray-50);
+    box-shadow: inset 0 2px 16px rgba(0, 0, 0, .05);
+}
+.payment-summary-divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 100%;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: var(--gray-50);
+    box-shadow: inset 0 2px 16px rgba(0, 0, 0, .05);
+}
+.payment-summary-total {
+    padding-bottom: 16px;
+}
+.payment-summary-total .payment-summary-name {
+    color: var(--gray-900);
+}
+.payment-summary-total .payment-summary-price {
+    font-size: 16px;
+    color: var(--indigo-500);
+    font-weight: 600;
+}
+.payment-right {
+    min-width: 0;
+}
+.payment-form {
+    padding: 24px;
+    background-color: var(--white);
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, .05);
+}
+.payment-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    line-height: 1.3;
+}
+.payment-method {
+    display: flex;
+    align-items: center;
+    overflow-x: auto;
+    padding: 6px 0;
+    margin-bottom: 12px;
+    width: 100%;
+}
+.payment-method input {
+    display: none;
+}
+.payment-method-item {
+    width: 80px;
+    height: 80px;
+    padding: 8px;
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    margin-right: 12px;
+    cursor: pointer;
+    position: relative;
+    flex-shrink: 0;
+}
+input:checked + .payment-method-item {
+    border-color: var(--indigo-500);
+}
+input:checked + .payment-method-item::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background-color: var(--indigo-500);
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTEwLjAwMDcgMTUuMTcwOUwxOS4xOTMxIDUuOTc4NTJMMjAuNjA3MyA3LjM5MjczTDEwLjAwMDcgMTcuOTk5M0wzLjYzNjcyIDExLjYzNTRMNS4wNTA5MyAxMC4yMjEyTDEwLjAwMDcgMTUuMTcwOVoiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMSkiPjwvcGF0aD48L3N2Zz4=");
+    background-size: 12px;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.payment-method-item > img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+.payment-form-group {
+    position: relative;
+    margin-bottom: 16px;
+}
+.payment-form-control {
+    outline: transparent;
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    padding: 24px 16px 8px 16px;
+    width: 100%;
+    transition: all .15s ease-in-out;
+}
+.payment-form-label {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 16px;
+    color: var(--gray-400);
+    pointer-events: none;
+    transition: all .1s ease-in-out;
+}
+.payment-form-control:focus {
+    outline: 1px solid var(--indigo-500);
+    border-color: var(--indigo-500);
+}
+.payment-form-control:focus + .payment-form-label,
+.payment-form-control:not(:placeholder-shown) + .payment-form-label {
+    top: 30%;
+    font-size: 12px;
+}
+.payment-form-label-required::after {
+    content: ' *';
+    color: var(--red-500);
+}
+.payment-form-group-flex {
+    display: flex;
+    align-items: center;
+}
+.payment-form-group-flex > * {
+    width: 100%;
+}
+.payment-form-group-flex > :not(:last-child) {
+    margin-right: 12px;
+}
+.payment-form-submit-button {
+    background-color: var(--indigo-500);
+    border-radius: 8px;
+    outline: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    color: var(--white);
+    font-weight: 600;
+    padding: 16px;
+    transition: all .15s ease-in-out;
+}
+.payment-form-submit-button:hover {
+    background-color: var(--indigo-600);
+}
+.payment-form-submit-button > i {
+    margin-right: 8px;
+}
+/* end: Payment */
+
+
+
+/* start: Breakpoints */
+@media screen and (max-width: 767px) {
+    .payment-wrapper {
+        grid-template-columns: 1fr;
+    }
+    .payment-content {
+        padding: 16px;
+    }
+    .payment-content::before {
+        top: 16px;
+        width: calc(100% - 20px);
+    }
+    .payment-form-group-flex {
+        display: block;
+    }
+}
+/* end: Breakpoints */
+
+:root {
+    /* This color palletes from Tailwind CSS */
+    --white: #fff;
+    --black: #000;
+     
+    --gray-50: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-300: #d1d5db;
+    --gray-400: #9ca3af;
+    --gray-500: #6b7280;
+    --gray-600: #4b5563;
+    --gray-700: #374151;
+    --gray-800: #1f2937;
+    --gray-900: #111827;
+    --gray-950: #030712;
+
+     
+    
+    
+
+    
+    --indigo-50: #eef2ff;
+    --indigo-100: #e0e7ff;
+    --indigo-200: #c7d2fe;
+    --indigo-300: #a5b4fc;
+    --indigo-400: #818cf8;
+    --indigo-500: #6366f1;
+    --indigo-600: #4f46e5;
+    --indigo-700: #4338ca;
+    --indigo-800: #3730a3;
+    --indigo-900: #312e81;
+    --indigo-950: #1e1b4b;
+
+    --violet-50: #f5f3ff;
+    --violet-100: #ede9fe;
+    --violet-200: #ddd6fe;
+    --violet-300: #c4b5fd;
+    --violet-400: #a78bfa;
+    --violet-500: #8b5cf6;
+    --violet-600: #7c3aed;
+    --violet-700: #6d28d9;
+    --violet-800: #5b21b6;
+    --violet-900: #4c1d95;
+    --violet-950: #2e1065;
+
+    --purple-50: #faf5ff;
+    --purple-100: #f3e8ff;
+    --purple-200: #e9d5ff;
+    --purple-300: #d8b4fe;
+    --purple-400: #c084fc;
+    --purple-500: #a855f7;
+    --purple-600: #9333ea;
+    --purple-700: #7e22ce;
+    --purple-800: #6b21a8;
+    --purple-900: #581c87;
+    --purple-950: #3b0764;
+
+    --fuchsia-50: #fdf4ff;
+    --fuchsia-100: #fae8ff;
+    --fuchsia-200: #f5d0fe;
+    --fuchsia-300: #f0abfc;
+    --fuchsia-400: #e879f9;
+    --fuchsia-500: #d946ef;
+    --fuchsia-600: #c026d3;
+    --fuchsia-700: #a21caf;
+    --fuchsia-800: #86198f;
+    --fuchsia-900: #701a75;
+    --fuchsia-950: #4a044e;
+
+    --pink-50: #fdf2f8;
+    --pink-100: #fce7f3;
+    --pink-200: #fbcfe8;
+    --pink-300: #f9a8d4;
+    --pink-400: #f472b6;
+    --pink-500: #ec4899;
+    --pink-600: #db2777;
+    --pink-700: #be185d;
+    --pink-800: #9d174d;
+    --pink-900: #831843;
+    --pink-950: #500724;
+
+    --rose-50: #fff1f2;
+    --rose-100: #ffe4e6;
+    --rose-200: #fecdd3;
+    --rose-300: #fda4af;
+    --rose-400: #fb7185;
+    --rose-500: #f43f5e;
+    --rose-600: #e11d48;
+    --rose-700: #be123c;
+    --rose-800: #9f1239;
+    --rose-900: #881337;
+    --rose-950: #4c0519;
+}
+
+    </style>
+</head>
+<body>
+    
+    <!-- start: Payment -->
+    <section class="payment-section">
+        <div class="container">
+            <div class="payment-wrapper">
+                <div class="payment-left">
+                    <div class="payment-header">
+                        <div class="payment-header-icon"><i class="ri-flashlight-fill"></i></div>
+                        <div class="payment-header-title">  </div>
+                        <p class="payment-header-description"> </p>
+                    </div>
+                    <div class="payment-content">
+                        <div class="payment-body">
+                            <div class="payment-plan">
+                                 
+                                <div class="payment-plan-info">
+                                     
+                                    
+                                </div>
+                                
+                            </div>
+                            <div class="payment-summary">
+                                <div class="payment-summary-item">
+                                   <h1 style=>Thank you for Help! </h1>
+                                    
+                                </div>
+                                <div class="payment-summary-item">
+                                     
+                                    
+                                </div>
+                                <div class="payment-summary-divider"></div>
+                                <div class="payment-summary-item payment-summary-total">
+                                    <div class="payment-summary-name">Total</div>
+                                    <div class="payment-summary-price">kunal </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="payment-right">
+                    <form action="" class="payment-form">
+                        <h1 class="payment-title">Payment Details</h1>
+                        <div class="payment-method">
+                            <input type="radio" name="payment-method" id="method-1" value="net-banking" onclick="showFields(this)">
+                            <label for="method-1" class="payment-method-item">
+                                <img src="img/net-banking.png" alt="">
+                            </label>
+                            <input type="radio" name="payment-method" id="method-2" value="card" onclick="showFields(this)">
+                            <label for="method-2" class="payment-method-item">
+                                <img src="img/card.png" alt="">
+                            </label>
+                            <input type="radio" name="payment-method" id="method-3" value="upi" onclick="showFields(this)">
+                            <label for="method-3" class="payment-method-item">
+                                <img src="img/UPI-Color.png" alt="">
+                            </label>
+                            <input type="radio" name="payment-method" id="method-4" value="qr" onclick="showFields(this)">
+                            <label for="method-4" class="payment-method-item">
+                                <img src="img/qr.png" alt="">
+                            </label>
+                        </div>
+                        <!-- Email and Password fields for Net Banking -->
+                        <div id="net-banking-fields" class="hidden">
+                            <div class="payment-form-group">
+                                <input type="email" placeholder=" " class="payment-form-control" id="email">
+                                <label for="email" class="payment-form-label payment-form-label-required">Email Address</label>
+                            </div>
+                            <div class="payment-form-group">
+                                <input type="password" placeholder=" " class="payment-form-control" id="password">
+                                <label for="password" class="payment-form-label payment-form-label-required">Password</label>
+                            </div>
+                        </div>
+                        <!-- UPI ID input for UPI -->
+                        <div id="upi-fields" class="hidden">
+                            <div class="payment-form-group">
+                                <input type="text" placeholder=" " class="payment-form-control" id="upi-id">
+                                <label for="upi-id" class="payment-form-label payment-form-label-required">Enter UPI ID</label>
+                            </div>
+                        </div>
+                        <!-- QR code generation -->
+                        <div id="qr-fields" class="hidden">
+                            <button type="button" class="payment-form-submit-button" onclick="generateQRCode()"><i class="ri-wallet-line"></i> Generate QR Code</button>
+                            <div id="qr-code" class="hidden">
+                                <img src="img/Generated QR.png" alt="Generated QR Code" width="400" height="380">
+                            </div>
+                        </div>
+                        <!-- Card Payment Fields -->
+                        <div id="card-fields" class="hidden">
+                            <div class="payment-form-group">
+                                <input type="text" placeholder=" " class="payment-form-control" id="card-number">
+                                <label for="card-number" class="payment-form-label payment-form-label-required">Card Number</label>
+                            </div>
+                            <div class="payment-form-group-flex">
+                                <div class="payment-form-group">
+                                    <input type="date" placeholder=" " class="payment-form-control" id="expiry-date">
+                                    <label for="expiry-date" class="payment-form-label payment-form-label-required">Expiry Date</label>
+                                </div>
+                                <div class="payment-form-group">
+                                    <input type="text" placeholder=" " class="payment-form-control" id="cvv">
+                                    <label for="cvv" class="payment-form-label payment-form-label-required">CVV</label>
+                                </div>
+                            </div>
+                        </div>
+       <button type="submit" class="payment-form-submit-button hidden" id="pay-button" onclick="event.preventDefault(); window.location.href='index.html'">
+    <i class="ri-wallet-line"></i> Pay
+</button>
+
+
+ 
+      </form>
+
+ 
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- end: Payment -->
+
+    <script>
+function myFunction() {
+  location.replace("C:\Users\saira\Desktop\feedlink-main\about")
+}
+        function showFields(selectedMethod) {
+            // Hide all fields
+            document.getElementById('net-banking-fields').classList.add('hidden');
+            document.getElementById('upi-fields').classList.add('hidden');
+            document.getElementById('qr-fields').classList.add('hidden');
+            document.getElementById('card-fields').classList.add('hidden');
+            document.getElementById('pay-button').classList.add('hidden');
+
+            // Show fields based on the selected method
+            if (selectedMethod.value === 'net-banking') {
+                document.getElementById('net-banking-fields').classList.remove('hidden');
+                document.getElementById('pay-button').classList.remove('hidden');
+            } else if (selectedMethod.value === 'upi') {
+                document.getElementById('upi-fields').classList.remove('hidden');
+                document.getElementById('pay-button').classList.remove('hidden');
+            } else if (selectedMethod.value === 'qr') {
+                document.getElementById('qr-fields').classList.remove('hidden');
+
+                document.getElementById('pay-button').classList.remove('hidden');
+            } else if (selectedMethod.value === 'card') {
+                document.getElementById('card-fields').classList.remove('hidden');
+                document.getElementById('pay-button').classList.remove('hidden');
+            }
+        }
+
+        function generateQRCode() {
+            // Logic to generate QR code goes here
+            document.getElementById('qr-code').classList.remove('hidden');
+        }
+
+        function getQueryParam(param) {
+        let urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+    }
+
+    // Get the donation amount from the URL
+    const donationAmount = getQueryParam('amount');
+
+    // Display the amount on the payment page
+    if (donationAmount) {
+        document.querySelector('.payment-header-title').textContent = `Your contribution of Rs. ${donationAmount} helps feed those in need.`;
+    }
+
+  if (donationAmount) {
+        document.querySelector('.payment-summary-price').textContent = ` Rs. ${donationAmount}  `;
+    }
+
+    </script>
+
+</body>
+</html>
