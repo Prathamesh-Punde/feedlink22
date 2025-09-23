@@ -16,13 +16,15 @@ app.use(cors());
 
 const MONGO_URI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/authdb";
 
-mongoose.connect(MONGO_URI)
-  .then(() => console.log("✅ MongoDB connected"))
-  .catch((err) => {
+(async () => {
+  try {
+    await mongoose.connect(MONGO_URI);
+    console.log("✅ MongoDB connected");
+  } catch (err) {
     console.error("❌ MongoDB connection error:", err.message || err);
     process.exit(1);
-  });
-
+  }
+})();
 
 const frontendPath = path.join(__dirname, "..", "client");
 console.log("🛠 Serving frontend from:", frontendPath);
