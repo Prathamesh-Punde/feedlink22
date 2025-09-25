@@ -1,4 +1,3 @@
-
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
@@ -42,6 +41,9 @@ app.use("/api/donees/near", require("./routes/nearDonee")); // GET  /api/donees/
 app.use("/api/donees", require("./routes/addDonee"));       // POST /api/donees - UNPROTECTED!
 app.use("/api/admin", require("./routes/adminStats"));      // Admin statistics
 
+// Protected routes - These must come BEFORE the static files middleware
+// This will check authentication for the Donate.html page
+app.use("/", require("./routes/protected")); 
 
 // Serve static files
 app.use(express.static(frontendPath));
