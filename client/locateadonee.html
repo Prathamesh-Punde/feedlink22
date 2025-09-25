@@ -29,6 +29,54 @@
   </div>
 
   <script>
+    // Function to check if user is logged in
+    function isLoggedIn() {
+      return localStorage.getItem('token') !== null;
+    }
+    
+    // Function to handle donee notification
+    async function notifyDonee(doneeId, doneeName) {
+      // Check if user is logged in
+      if (!isLoggedIn()) {
+        alert('You need to login first to donate');
+        window.location.href = '/login.html?redirectTo=' + encodeURIComponent(window.location.pathname);
+        return;
+      }
+      
+      // Ask for confirmation
+      if (!confirm(`Are you sure you want to notify ${doneeName} about your donation? They will receive your contact information by email.`)) {
+        return;
+      }
+      
+      try {
+        // Get contact information for the notification
+        let contact = prompt('Please enter your contact number for the donee to reach you:', '');
+        
+        // If user cancels the prompt
+        if (contact === null) return;
+        
+        const response = await fetch(`/api/donations/notify/${doneeId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          },
+          body: JSON.stringify({ contact })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          alert(`✅ Success! ${doneeName} has been notified about your donation.`);
+        } else {
+          alert(`❌ Error: ${data.message || 'Could not notify the donee'}`);
+        }
+      } catch (error) {
+        console.error('Notification error:', error);
+        alert('❌ Failed to send notification. Please try again later.');
+      }
+    }
+    
     async function fetchNearby(lat, lng) {
       try {
         const res = await fetch(`/api/donees/near?lat=${lat}&lng=${lng}&dist=5000`);
@@ -58,9 +106,14 @@
                   <strong>Contact:</strong> <a href="tel:${d.contact || ''}" class="text-primary">${d.contact || 'N/A'}</a><br>
                   <strong>Beneficiaries:</strong> ${d.beneficiaries || 0}
                 </p>
-                <a href="tel:${d.contact || ''}" class="btn btn-primary ${!d.contact ? 'disabled' : ''}">
-                  📞 Call Now
-                </a>
+                <div class="d-flex">
+                  <a href="tel:${d.contact || ''}" class="btn btn-primary ${!d.contact ? 'disabled' : ''} mr-2">
+                    📞 Call Now
+                  </a>
+                  <button class="btn btn-success" onclick="notifyDonee('${d._id}', '${d.name}')">
+                    🍲 Give to this Donee
+                  </button>
+                </div>
               </div>
             </div>
           `;

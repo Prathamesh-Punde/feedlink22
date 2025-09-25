@@ -4,6 +4,7 @@ const doneeSchema = new mongoose.Schema({
   name: { type: String, required: true },
   address: String,
   contact: { type: String, required: true },
+  email: { type: String },
   beneficiaries: { type: Number, default: 0 },
   location: {
     type: { type: String, enum: ['Point'], required: true },

@@ -40,6 +40,7 @@ app.use("/api/donees/near", require("./routes/nearDonee")); // GET  /api/donees/
 // TODO: Add authentication middleware for admin routes
 app.use("/api/donees", require("./routes/addDonee"));       // POST /api/donees - UNPROTECTED!
 app.use("/api/admin", require("./routes/adminStats"));      // Admin statistics
+app.use("/api/donations", require("./routes/donations"));   // Donation notifications - PROTECTED
 
 // Protected routes - These must come BEFORE the static files middleware
 // This will check authentication for the Donate.html page

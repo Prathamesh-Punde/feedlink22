@@ -4,7 +4,7 @@ const Donee = require('../models/donee');
 
 router.post('/', async (req, res) => {
   try {
-    const { name, contact, address, beneficiaries, lat, lng } = req.body;
+    const { name, contact, email, address, beneficiaries, lat, lng } = req.body;
     
     // Validation
     if (!name || !contact || !lat || !lng) {
@@ -17,6 +17,7 @@ router.post('/', async (req, res) => {
     const donee = new Donee({
       name,
       contact,
+      email,
       address,
       beneficiaries,
       location: { type: 'Point', coordinates: [parseFloat(lng), parseFloat(lat)] }
