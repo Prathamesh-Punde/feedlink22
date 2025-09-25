@@ -4,17 +4,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Register</title>
+  <title>Register - FeedLink</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
   <style>
     body {
       font-family: 'Arial', sans-serif;
       margin: 0;
-      overflow: hidden;
-      background: linear-gradient(135deg, #c3d9f0, #8ebbdb, #a6c1de);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
+      background: linear-gradient(135deg, #f0f4f8, #d9e4ec, #a6c1de);
+      min-height: 100vh;
+      padding-top: 80px;
     }
 
     .register-container {
@@ -22,11 +21,13 @@
       overflow: hidden;
       width: 450px;
       max-width: 100%;
-      border-radius: 8px;
+      border-radius: 16px;
       box-sizing: border-box;
       animation: fadeIn 1s ease-in-out;
       background-color: #fff;
       color: #000;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      padding: 40px 32px 32px 32px;
     }
 
     .register-container:before {
@@ -36,13 +37,18 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.2);
+      background: linear-gradient(135deg, #c3d9f0 0%, #8ebbdb 100%);
+      opacity: 0.08;
       z-index: -1;
+      border-radius: 16px;
     }
 
     .register-container h2 {
       text-align: center;
-      margin-top: 40px;
+      margin-bottom: 32px;
+      font-weight: 700;
+      color: #187bff;
+      letter-spacing: 1px;
     }
 
     .register-form {
@@ -70,18 +76,20 @@
     }
 
     input[type="submit"] {
-      background-color: #187bff;
+      background: linear-gradient(135deg, #187bff, #145b9c);
       color: #fff;
       border: none;
       padding: 14px;
-      border-radius: 4px;
+      border-radius: 6px;
       cursor: pointer;
       font-size: 16px;
-      transition: background-color 0.3s ease;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(24,123,255,0.08);
+      transition: background 0.3s;
     }
 
     input[type="submit"]:hover {
-      background-color: #145b9c;
+      background: linear-gradient(135deg, #145b9c, #187bff);
     }
 
     .form-group a {
@@ -101,11 +109,43 @@
         opacity: 1;
       }
     }
+    .logo {
+      max-width: 100px;
+      max-height: 100px;
+    }
+    
+    .navbar {
+      background: linear-gradient(135deg, #f0f4f8, #d9e4ec, #a6c1de);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+    
+    .navbar-nav .nav-item {
+      margin-left: 18px;
+    }
+    
+    .register-container {
+      margin-top: 40px;
+    }
   </style>
 </head>
 
 <body>
-  <div class="register-container">
+  <!-- Header -->
+  <header class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <a class="navbar-brand" href="index.html"><img src="img/logo.png" alt="Logo" class="logo"></a>
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+      <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+      <li class="nav-item"><a class="nav-link" href="Donate.html">Donate</a></li>
+      <li class="nav-item"><a class="nav-link" href="blogs.html">Blogs</a></li>
+      <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+      <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
+      <li class="nav-item"><a class="nav-link text-danger" href="admin.html">Admin</a></li>
+    </ul>
+  </header>
+  
+  <div class="container d-flex justify-content-center">
+    <div class="register-container">
     <h2>Register</h2>
     <form id="registerForm" class="register-form">
       <div class="form-group">
@@ -129,39 +169,7 @@
     </form>
   </div>
 
-  <!-- <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const form = document.getElementById("registerForm");
 
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        const username = form.username.value;
-        const email = form.email.value;
-        const password = form.password.value;
-
-        try {
-          const res = await fetch("/api/auth/register", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username, email, password })
-          });
-
-          const data = await res.json();
-          if (!res.ok) {
-            alert(data.msg || "❌ Registration failed");
-            return;
-          }
-
-          alert("✅ Registration successful! Please login.");
-          window.location.href = "/login.html";
-        } catch (err) {
-          console.error(err);
-          alert("Network error");
-        }
-      });
-    });
-  </script> -->
 
   <script>
 document.querySelector("form").addEventListener("submit", async (e) => {

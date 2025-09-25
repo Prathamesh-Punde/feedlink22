@@ -5,14 +5,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
 
-      <title>Login</title>
+      <title>Login - FeedLink</title>
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
       <style>
         body {
           font-family: 'Inter', 'Arial', sans-serif;
           margin: 0;
-          background: linear-gradient(135deg, #c3d9f0, #8ebbdb, #a6c1de);
+          background: linear-gradient(135deg, #f0f4f8, #d9e4ec, #a6c1de);
           min-height: 100vh;
         }
 
@@ -133,9 +134,9 @@
         
     </header>
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light">
+  <header class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="index.html"><img src="img/logo.png" alt="Logo"></a>
-    <ul class="navbar-nav">
+    <ul class="navbar-nav ml-auto">
       <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
       <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
       <li class="nav-item"><a class="nav-link" href="Donate.html">Donate</a></li>
@@ -144,7 +145,7 @@
       <li class="nav-item"><a class="nav-link active" href="login.html">Login</a></li>
       <li class="nav-item"><a class="nav-link text-danger" href="admin.html">Admin</a></li>
     </ul>
-  </nav>
+  </header>
 
   <div class="login-bg">
     <div class="login-container">
@@ -173,6 +174,13 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
+      // Check if there's a message in the URL (from redirection)
+      const params = new URLSearchParams(window.location.search);
+      const message = params.get('message');
+      if (message) {
+        showError(message);
+      }
+      
       const form = document.getElementById("loginForm");
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -192,8 +200,12 @@
           }
           localStorage.setItem("token", data.token);
           showSuccess("✅ Login successful! Redirecting...");
+          
+          // Redirect to the page that was requested before login
+          // or to the Donate page if no specific redirect was requested
+          const redirectTo = params.get('redirectTo') || '/Donate.html';
           setTimeout(() => {
-            window.location.href = "/Donate.html";
+            window.location.href = redirectTo;
           }, 1200);
         } catch (err) {
           showError("Network error. Please try again.");
