@@ -5,9 +5,7 @@ const User = require("../models/User");
 
 const router = express.Router();
 
-// ======================
-// 📝 Register
-// ======================
+
 router.post("/register", async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -33,9 +31,7 @@ router.post("/register", async (req, res) => {
   }
 });
 
-// ======================
-// 🔑 Login
-// ======================
+
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -57,10 +53,8 @@ router.post("/login", async (req, res) => {
       expiresIn: "1h",
     });
     
-    // Set the token as a cookie
     res.setHeader('Set-Cookie', `token=${token}; HttpOnly; Path=/; Max-Age=3600`);
 
-    // ✅ Send success so frontend can redirect
     res.json({ success: true, message: "Login successful", token });
   } catch (error) {
     res.status(500).json({ success: false, message: "Server error", error: error.message });

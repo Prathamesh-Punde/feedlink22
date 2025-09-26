@@ -2,13 +2,11 @@ const express = require('express');
 const router = express.Router();
 const Donee = require('../models/donee');
 const User = require('../models/User');
-const auth = require('../middleware/auth'); // Import the auth middleware
+const auth = require('../middleware/auth'); 
 const { sendDonationNotification } = require('../utils/mailer');
 
-// Route to notify a donee about a donation
 router.post('/notify/:doneeId', auth, async (req, res) => {
   try {
-    // Get donor info from authenticated user
     const userId = req.user.userId;
     const donor = await User.findById(userId);
     
@@ -16,7 +14,6 @@ router.post('/notify/:doneeId', auth, async (req, res) => {
       return res.status(404).json({ success: false, message: 'Donor not found' });
     }
     
-    // Get donee info
     const doneeId = req.params.doneeId;
     const donee = await Donee.findById(doneeId);
     
@@ -24,7 +21,6 @@ router.post('/notify/:doneeId', auth, async (req, res) => {
       return res.status(404).json({ success: false, message: 'Donee not found' });
     }
     
-    // Check if donee has an email
     if (!donee.email) {
       return res.status(400).json({ 
         success: false, 
@@ -32,7 +28,6 @@ router.post('/notify/:doneeId', auth, async (req, res) => {
       });
     }
 
-    // Send email notification
     await sendDonationNotification(
       { name: donee.name, email: donee.email },
       { name: donor.name, contact: req.body.contact || 'Not provided' }

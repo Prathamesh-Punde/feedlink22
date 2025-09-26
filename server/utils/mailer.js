@@ -1,17 +1,16 @@
 const nodemailer = require('nodemailer');
 
-// Create a transporter object with hardcoded credentials
-// NOTE: Hardcoding credentials is not recommended for production applications
+
 let transporter = nodemailer.createTransport({
-  service: 'gmail',  // Using Gmail service identifier instead of manual host/port
+  service: 'gmail',  
   auth: {
     user: 'feedlink.info@gmail.com',
     pass: 'oqqw gmmj parj ppiz'
   },
   tls: {
-    rejectUnauthorized: false  // Helps with some connection issues
+    rejectUnauthorized: false  
   },
-  debug: true  // Enable debug logs
+  debug: true  
 });
 
 /**
@@ -79,7 +78,6 @@ async function sendDonationNotification(donee, donor) {
   } catch (error) {
     console.error('Email sending failed:', error);
     
-    // More detailed error information
     if (error.code === 'EAUTH') {
       throw new Error('Authentication failed: check your email credentials');
     } else if (error.code === 'ESOCKET') {
@@ -92,7 +90,6 @@ async function sendDonationNotification(donee, donor) {
   }
 }
 
-// Verify connection configuration
 transporter.verify(function(error, success) {
   if (error) {
     console.log('SMTP connection error:', error);

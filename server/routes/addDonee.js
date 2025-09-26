@@ -6,7 +6,6 @@ router.post('/', async (req, res) => {
   try {
     const { name, contact, email, address, beneficiaries, lat, lng } = req.body;
     
-    // Validation
     if (!name || !contact || !lat || !lng) {
       return res.status(400).json({ error: 'Name, contact, latitude, and longitude are required' });
     }

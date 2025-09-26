@@ -3,12 +3,10 @@ const router = express.Router();
 const User = require('../models/User');
 const Donee = require('../models/donee');
 
-// Admin authentication endpoint
 router.post('/login', async (req, res) => {
   try {
     const { id, password } = req.body;
     
-    // Hardcoded admin credentials (in production, use proper authentication)
     if (id === 'admin' && password === 'admin') {
       res.json({ success: true, message: 'Admin authenticated' });
     } else {
@@ -19,13 +17,11 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// Get admin dashboard statistics
 router.get('/stats', async (req, res) => {
   try {
     const userCount = await User.countDocuments();
     const doneeCount = await Donee.countDocuments();
     
-    // Get recent registrations (last 7 days)
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
     

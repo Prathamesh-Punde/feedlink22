@@ -9,7 +9,7 @@ const app = express();
 
 
 app.use(express.json()); 
-app.use(express.urlencoded({ extended: true })); // ✅ Allow form submissions
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 
@@ -35,21 +35,19 @@ if (!fs.existsSync(loginPath)) console.warn("⚠️ login.html NOT FOUND");
 if (!fs.existsSync(registerPath)) console.warn("⚠️ register.html NOT FOUND");
 
 
-app.use("/api/auth", require("./routes/auth")); // Authentication APIs
-app.use("/api/donees/near", require("./routes/nearDonee")); // GET  /api/donees/near (must be first)
-// TODO: Add authentication middleware for admin routes
-app.use("/api/donees", require("./routes/addDonee"));       // POST /api/donees - UNPROTECTED!
-app.use("/api/admin", require("./routes/adminStats"));      // Admin statistics
-app.use("/api/donations", require("./routes/donations"));   // Donation notifications - PROTECTED
+app.use("/api/auth", require("./routes/auth")); 
+app.use("/api/donees/near", require("./routes/nearDonee")); 
+app.use("/api/donees", require("./routes/addDonee"));       
+app.use("/api/admin", require("./routes/adminStats"));     
+app.use("/api/donations", require("./routes/donations"));   
 
-// Protected routes - These must come BEFORE the static files middleware
-// This will check authentication for the Donate.html page
+
 app.use("/", require("./routes/protected")); 
 
-// Serve static files
+
 app.use(express.static(frontendPath));
 
-// Root route → index.html or login.html
+
 app.get("/", (req, res) => {
   const indexPath = path.join(frontendPath, "index.html");
   if (fs.existsSync(indexPath)) return res.sendFile(indexPath);
@@ -57,11 +55,10 @@ app.get("/", (req, res) => {
   res.status(404).send("404: No index.html or login.html found.");
 });
 
-// Explicit routes for login & register
+
 app.get(["/login", "/login.html"], (req, res) => res.sendFile(loginPath));
 app.get(["/register", "/register.html"], (req, res) => res.sendFile(registerPath));
 
-// 404 Catch-All
 app.use((req, res) => res.status(404).json({ success: false, message: "Page not found" }));
 
 // ======================
