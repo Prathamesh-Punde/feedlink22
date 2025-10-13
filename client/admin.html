@@ -3,9 +3,126 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin - Add Donee | FeedLink</title>
+  <title>Admin - Manage Donees | FeedLink</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="style.css">
+  <style>
+    .donee-card {
+      transition: all 0.3s ease;
+      border-left: 4px solid #28a745;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+    .donee-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+      border-left-color: #007bff;
+    }
+    .spinner-border {
+      width: 2rem;
+      height: 2rem;
+    }
+    #doneesContainer {
+      max-height: 70vh;
+      overflow-y: auto;
+      padding-right: 5px;
+    }
+    #doneesContainer::-webkit-scrollbar {
+      width: 6px;
+    }
+    #doneesContainer::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+    #doneesContainer::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 10px;
+    }
+    #doneesContainer::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+    .card {
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+    }
+    .nav-pills .nav-link {
+      border-radius: 25px;
+      font-weight: 500;
+      padding: 12px 24px;
+      margin: 0 5px;
+      transition: all 0.3s ease;
+    }
+    .nav-pills .nav-link.active {
+      background: linear-gradient(135deg, #f0f4f8, #d9e4ec, #a6c1de);
+      border: none;
+      color: #333;
+    }
+    .form-section {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      border-left: 4px solid #007bff;
+    }
+    .form-control:focus {
+      border-color: #a6c1de;
+      box-shadow: 0 0 0 0.2rem rgba(166, 193, 222, 0.25);
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #f0f4f8, #d9e4ec, #a6c1de);
+      border: none;
+      border-radius: 25px;
+      font-weight: 500;
+      color: #333;
+      transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(166, 193, 222, 0.4);
+      color: #333;
+    }
+    .jumbotron {
+      border-radius: 15px !important;
+    }
+    .font-weight-semibold {
+      font-weight: 600;
+    }
+    .alert-light {
+      background-color: #f8f9ff;
+    }
+    .info-item {
+      display: flex;
+      align-items: flex-start;
+    }
+    .info-label {
+      font-weight: 600;
+      color: #495057;
+      min-width: 110px;
+      margin-right: 8px;
+    }
+    .info-value {
+      color: #212529;
+      word-break: break-word;
+    }
+    .font-monospace {
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+    }
+    .dropdown-toggle::after {
+      display: none;
+    }
+    @media (max-width: 768px) {
+      .info-item {
+        flex-direction: column;
+      }
+      .info-label {
+        min-width: auto;
+        margin-bottom: 4px;
+      }
+    }
+  </style>
 </head>
 <body>
   <!-- Admin Login Modal -->
@@ -52,106 +169,213 @@
     </ul>
   </header>
 
-  <div class="container mt-5">
-    <!-- Admin Statistics Dashboard -->
+  <div class="container-fluid mt-4">
+    <!-- Welcome Header -->
     <div class="row mb-4">
-      <div class="col-md-12">
-        <div class="card bg-info text-white">
-          <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <h4 class="card-title mb-0">📊 Admin Dashboard</h4>
-              <button class="btn btn-light btn-sm" onclick="loadAdminStats()">
-                🔄 Refresh
-              </button>
-            </div>
-            <div class="row text-center">
-              <div class="col-md-4">
-                <h2 id="totalUsers">-</h2>
-                <p>Total Registered Users</p>
-              </div>
-              <div class="col-md-4">
-                <h2 id="totalDonees">-</h2>
-                <p>Total Donees</p>
-              </div>
-              <div class="col-md-4">
-                <h2 id="recentUsers">-</h2>
-                <p>New Users (7 days)</p>
-              </div>
-            </div>
+      <div class="col-12">
+        <div class="jumbotron jumbotron-fluid bg-gradient text-dark" style="background: linear-gradient(135deg, #f0f4f8, #d9e4ec, #a6c1de); border-radius: 10px;">
+          <div class="container text-center">
+            <h1 class="display-4">Admin Dashboard</h1>
+            <button class="btn btn-dark btn-lg" onclick="loadAdminStats()">
+              🔄 Refresh Data
+            </button>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="row justify-content-center">
-      <div class="col-md-8">
-        <div class="card">
-          <div class="card-header bg-primary text-white">
-            <h3 class="mb-0">🏢 Add New Donee</h3>
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body text-center">
+            <div class="text-primary mb-3">
+              <i class="fas fa-users fa-3x" style="font-size: 3rem;">👥</i>
+            </div>
+            <h3 class="card-title text-primary" id="totalUsers">-</h3>
+            <p class="card-text text-muted">Total Registered Users</p>
           </div>
-          <div class="card-body">
-            <form id="doneeForm">
-              <div class="form-group">
-                <label for="name">Organization/Person Name *</label>
-                <input type="text" class="form-control" name="name" id="name" required 
-                       placeholder="e.g., Local Food Bank, Community Center">
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body text-center">
+            <div class="text-success mb-3">
+              <i class="fas fa-building fa-3x" style="font-size: 3rem;">🏢</i>
+            </div>
+            <h3 class="card-title text-success" id="totalDonees">-</h3>
+            <p class="card-text text-muted">Total Donees</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body text-center">
+            <div class="text-warning mb-3">
+              <i class="fas fa-user-plus fa-3x" style="font-size: 3rem;">📈</i>
+            </div>
+            <h3 class="card-title text-warning" id="recentUsers">-</h3>
+            <p class="card-text text-muted">New Users (7 days)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="row">
+      <div class="col-12">
+        <ul class="nav nav-pills nav-fill mb-4" id="adminTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="manage-tab" data-toggle="pill" href="#manage" role="tab">
+              👥 Manage Donees
+            </a>
+          </li>
+          <li class="nav-item" role="presentation">
+            <a class="nav-link" id="add-tab" data-toggle="pill" href="#add" role="tab">
+              ➕ Add New Donee
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Tab Content -->
+    <div class="tab-content" id="adminTabContent">
+      <!-- Manage Donees Tab -->
+      <div class="tab-pane fade show active" id="manage" role="tabpanel">
+        <div class="row">
+          <div class="col-12">
+            <div class="card border-0 shadow">
+              <div class="card-header bg-white border-bottom-0">
+                <div class="d-flex justify-content-between align-items-center">
+                  <h5 class="mb-0 text-dark">👥 Current Donees</h5>
+                  <small class="text-muted">Recently added donees appear first</small>
+                </div>
               </div>
-              
-              <div class="form-group">
-                <label for="contact">Contact Number *</label>
-                <input type="tel" class="form-control" name="contact" id="contact" required 
-                       placeholder="e.g., +1-234-567-8900 or 1234567890">
-              </div>
-              
-              <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" class="form-control" name="email" id="email"
-                       placeholder="e.g., organization@example.com">
-                <small class="form-text text-muted">Email is required to send donation notifications</small>
-              </div>
-              
-              <div class="form-group">
-                <label for="address">Address</label>
-                <textarea class="form-control" name="address" id="address" rows="2" 
-                          placeholder="Full address including city, state"></textarea>
-              </div>
-              
-              <div class="form-group">
-                <label for="beneficiaries">Number of Beneficiaries</label>
-                <input type="number" class="form-control" name="beneficiaries" id="beneficiaries" 
-                       min="1" placeholder="How many people this helps feed">
-              </div>
-              
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="lat">Latitude *</label>
-                    <input type="number" step="any" class="form-control" name="lat" id="lat" required 
-                           placeholder="e.g., 40.7128">
+              <div class="card-body">
+                <div id="doneesContainer">
+                  <div class="text-center py-5">
+                    <div class="spinner-border text-primary" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                    <p class="mt-3 text-muted">Loading donees...</p>
                   </div>
                 </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="lng">Longitude *</label>
-                    <input type="number" step="any" class="form-control" name="lng" id="lng" required 
-                           placeholder="e.g., -74.0060">
-                  </div>
+                <div class="text-center mt-4">
+                  <button id="loadMoreBtn" class="btn btn-outline-primary" style="display: none;" onclick="loadMoreDonees()">
+                    📄 Load More Donees
+                  </button>
                 </div>
               </div>
-              
-              <div class="alert alert-info">
-                <small>💡 <strong>Tip:</strong> You can get coordinates from Google Maps by right-clicking on a location.</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add New Donee Tab -->
+      <div class="tab-pane fade" id="add" role="tabpanel">
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <div class="card border-0 shadow">
+              <div class="card-header bg-white text-center border-bottom-0">
+                <h5 class="mb-0 text-dark">🏢 Add New Donee Organization</h5>
+                <p class="text-muted mb-0">Fill in the details to add a new donee to the system</p>
               </div>
-              
-              <div class="text-center">
-                <button type="submit" class="btn btn-primary btn-lg">
-                  ➕ Add Donee
-                </button>
-                <button type="button" class="btn btn-secondary ml-2" onclick="getCurrentLocation()">
-                  📍 Use My Location
-                </button>
+              <div class="card-body p-4">
+                <form id="doneeForm">
+                  <!-- Basic Information Section -->
+                  <div class="form-section mb-4">
+                    <h6 class="text-primary mb-3">📝 Basic Information</h6>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="name" class="font-weight-semibold">Organization/Person Name *</label>
+                          <input type="text" class="form-control form-control-lg" name="name" id="name" required 
+                                 placeholder="e.g., Local Food Bank, Community Center">
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="contact" class="font-weight-semibold">Contact Number *</label>
+                          <input type="tel" class="form-control form-control-lg" name="contact" id="contact" required 
+                                 placeholder="e.g., +91-9876543210">
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="form-group">
+                      <label for="email" class="font-weight-semibold">Email Address *</label>
+                      <input type="email" class="form-control form-control-lg" name="email" id="email" required
+                             placeholder="e.g., organization@example.com">
+                      <small class="form-text text-muted">📧 Required for donation notifications</small>
+                    </div>
+                  </div>
+
+                  <!-- Additional Details Section -->
+                  <div class="form-section mb-4">
+                    <h6 class="text-primary mb-3">📋 Additional Details</h6>
+                    <div class="row">
+                      <div class="col-md-8">
+                        <div class="form-group">
+                          <label for="address" class="font-weight-semibold">Address</label>
+                          <textarea class="form-control" name="address" id="address" rows="3" 
+                                    placeholder="Full address including city, state"></textarea>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label for="beneficiaries" class="font-weight-semibold">Beneficiaries</label>
+                          <input type="number" class="form-control form-control-lg" name="beneficiaries" id="beneficiaries" 
+                                 min="1" placeholder="e.g., 50">
+                          <small class="form-text text-muted">People helped</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Location Section -->
+                  <div class="form-section mb-4">
+                    <h6 class="text-primary mb-3">📍 Location Coordinates</h6>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="lat" class="font-weight-semibold">Latitude *</label>
+                          <input type="number" step="any" class="form-control form-control-lg" name="lat" id="lat" required 
+                                 placeholder="e.g., 40.7128">
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="lng" class="font-weight-semibold">Longitude *</label>
+                          <input type="number" step="any" class="form-control form-control-lg" name="lng" id="lng" required 
+                                 placeholder="e.g., -74.0060">
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="alert alert-light border border-info">
+                      <div class="d-flex align-items-center">
+                        <span class="mr-2">💡</span>
+                        <div>
+                          <strong>Need coordinates?</strong><br>
+                          <small class="text-muted">Right-click on Google Maps and copy the coordinates, or use the button below to detect your current location.</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Action Buttons -->
+                  <div class="text-center pt-3 border-top">
+                    <button type="submit" class="btn btn-primary btn-lg px-5 mr-3">
+                      ➕ Add Donee
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary btn-lg px-4" onclick="getCurrentLocation()">
+                      📍 Use My Location
+                    </button>
+                  </div>
+                </form>
               </div>
-            </form>
+            </div>
           </div>
         </div>
       </div>
@@ -193,32 +417,62 @@
       // Show loading state
       const submitBtn = e.target.querySelector('button[type="submit"]');
       const originalText = submitBtn.innerHTML;
-      submitBtn.innerHTML = '⏳ Adding...';
+      const isEditing = e.target.querySelector('input[name="doneeId"]');
+      
+      submitBtn.innerHTML = isEditing ? '⏳ Updating...' : '⏳ Adding...';
       submitBtn.disabled = true;
       
       try {
-        const data = Object.fromEntries(new FormData(e.target).entries());
+        const formData = new FormData(e.target);
+        const data = Object.fromEntries(formData.entries());
         
         // Validate coordinates
         if (!data.lat || !data.lng) {
           throw new Error('Latitude and Longitude are required');
         }
         
-        const res = await fetch('/api/donees', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-        });
+        let res, result;
+        
+        if (isEditing) {
+          // Update existing donee
+          const doneeId = data.doneeId;
+          delete data.doneeId; // Remove from data before sending
+          
+          res = await fetch(`/api/admin/donees/${doneeId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+        } else {
+          // Add new donee
+          res = await fetch('/api/donees', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+        }
 
-        const result = await res.json();
+        result = await res.json();
         
         if (res.ok) {
-          showAlert('✅ Donee added successfully!', 'success');
+          const action = isEditing ? 'updated' : 'added';
+          showAlert(`✅ Donee ${action} successfully!`, 'success');
+          
+          // Reset form and edit mode
           e.target.reset();
-          // Refresh admin stats
+          if (isEditing) {
+            cancelEdit();
+            // Switch back to manage tab after successful edit
+            setTimeout(() => {
+              document.getElementById('manage-tab').click();
+            }, 1000);
+          }
+          
+          // Refresh admin stats and donees list
           loadAdminStats();
+          loadDonees(true);
         } else {
-          throw new Error(result.error || 'Failed to add donee');
+          throw new Error(result.error || `Failed to ${isEditing ? 'update' : 'add'} donee`);
         }
         
       } catch (error) {
@@ -268,6 +522,237 @@
         setTimeout(() => alertDiv.remove(), 3000);
       }
     }
+
+    // Donee management variables
+    let allDonees = [];
+    let currentSkip = 0;
+    let hasMoreDonees = true;
+
+    // Load donees from API
+    async function loadDonees(reset = false) {
+      try {
+        if (reset) {
+          currentSkip = 0;
+          allDonees = [];
+          hasMoreDonees = true;
+        }
+
+        const res = await fetch(`/api/admin/donees?limit=3&skip=${currentSkip}`);
+        const data = await res.json();
+        
+        if (res.ok) {
+          allDonees = reset ? data.donees : [...allDonees, ...data.donees];
+          hasMoreDonees = data.hasMore;
+          currentSkip += data.donees.length;
+          
+          displayDonees();
+          updateLoadMoreButton();
+        } else {
+          throw new Error(data.error || 'Failed to load donees');
+        }
+      } catch (error) {
+        console.error('Error loading donees:', error);
+        document.getElementById('doneesContainer').innerHTML = `
+          <div class="alert alert-danger">
+            ❌ Error loading donees: ${error.message}
+          </div>
+        `;
+      }
+    }
+
+    // Display donees in the UI
+    function displayDonees() {
+      const container = document.getElementById('doneesContainer');
+      
+      if (allDonees.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-5">
+            <div class="text-muted mb-4">
+              <i style="font-size: 4rem;">📭</i>
+            </div>
+            <h5 class="text-muted">No donees found</h5>
+            <p class="text-muted mb-4">Add your first donee using the "Add New Donee" tab</p>
+            <button class="btn btn-primary" onclick="document.getElementById('add-tab').click()">
+              ➕ Add First Donee
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = allDonees.map((donee, index) => `
+        <div class="donee-card shadow-sm border-0" data-donee-id="${donee._id}">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+              <div class="d-flex align-items-center">
+                <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mr-3" style="width: 50px; height: 50px; font-size: 1.2rem;">
+                  🏢
+                </div>
+                <div>
+                  <h5 class="mb-1 text-dark font-weight-bold">${donee.name}</h5>
+                  <small class="text-muted">#${index + 1} • Added recently</small>
+                </div>
+              </div>
+              <div class="dropdown">
+                <button class="btn btn-light btn-sm" type="button" data-toggle="dropdown">
+                  ⋮
+                </button>
+                <div class="dropdown-menu dropdown-menu-right">
+                  <button class="dropdown-item" onclick="editDonee('${donee._id}')">
+                    <i class="text-warning">✏️</i> Edit Details
+                  </button>
+                  <div class="dropdown-divider"></div>
+                  <button class="dropdown-item text-danger" onclick="deleteDonee('${donee._id}', '${donee.name}')">
+                    <i>🗑️</i> Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="col-md-6">
+                <div class="info-item mb-2">
+                  <span class="info-label">📞 Contact:</span>
+                  <span class="info-value">${donee.contact}</span>
+                </div>
+                <div class="info-item mb-2">
+                  <span class="info-label">📧 Email:</span>
+                  <span class="info-value">${donee.email || '<span class="text-muted">Not provided</span>'}</span>
+                </div>
+                <div class="info-item mb-2">
+                  <span class="info-label">� Beneficiaries:</span>
+                  <span class="info-value">${donee.beneficiaries || '<span class="text-muted">Not specified</span>'}</span>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="info-item mb-2">
+                  <span class="info-label">📍 Address:</span>
+                  <span class="info-value">${donee.address || '<span class="text-muted">Not provided</span>'}</span>
+                </div>
+                <div class="info-item mb-2">
+                  <span class="info-label">🗺️ Coordinates:</span>
+                  <span class="info-value font-monospace">${donee.location.coordinates[1].toFixed(4)}, ${donee.location.coordinates[0].toFixed(4)}</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-3 pt-3 border-top d-flex justify-content-end">
+              <button class="btn btn-outline-primary btn-sm mr-2" onclick="editDonee('${donee._id}')">
+                ✏️ Edit
+              </button>
+              <button class="btn btn-outline-danger btn-sm" onclick="deleteDonee('${donee._id}', '${donee.name}')">
+                🗑️ Remove
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Update load more button visibility
+    function updateLoadMoreButton() {
+      const loadMoreBtn = document.getElementById('loadMoreBtn');
+      loadMoreBtn.style.display = hasMoreDonees ? 'inline-block' : 'none';
+    }
+
+    // Load more donees
+    function loadMoreDonees() {
+      loadDonees(false);
+    }
+
+    // Edit donee
+    function editDonee(doneeId) {
+      const donee = allDonees.find(d => d._id === doneeId);
+      if (!donee) return;
+
+      // Populate form with donee data
+      document.getElementById('name').value = donee.name;
+      document.getElementById('contact').value = donee.contact;
+      document.getElementById('email').value = donee.email || '';
+      document.getElementById('address').value = donee.address || '';
+      document.getElementById('beneficiaries').value = donee.beneficiaries || '';
+      document.getElementById('lat').value = donee.location.coordinates[1];
+      document.getElementById('lng').value = donee.location.coordinates[0];
+
+      // Change form to edit mode
+      const form = document.getElementById('doneeForm');
+      const submitBtn = form.querySelector('button[type="submit"]');
+      
+      submitBtn.innerHTML = '💾 Update Donee';
+      submitBtn.className = 'btn btn-warning btn-lg';
+      
+      // Add hidden input for donee ID
+      let hiddenInput = form.querySelector('input[name="doneeId"]');
+      if (!hiddenInput) {
+        hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = 'doneeId';
+        form.appendChild(hiddenInput);
+      }
+      hiddenInput.value = doneeId;
+
+      // Add cancel button
+      let cancelBtn = form.querySelector('.cancel-edit-btn');
+      if (!cancelBtn) {
+        cancelBtn = document.createElement('button');
+        cancelBtn.type = 'button';
+        cancelBtn.className = 'btn btn-outline-secondary btn-lg px-4 cancel-edit-btn';
+        cancelBtn.innerHTML = '❌ Cancel';
+        cancelBtn.onclick = cancelEdit;
+        submitBtn.parentNode.appendChild(cancelBtn);
+      }
+
+      // Switch to Add tab and scroll to form
+      document.getElementById('add-tab').click();
+      setTimeout(() => {
+        form.scrollIntoView({ behavior: 'smooth' });
+      }, 300);
+    }
+
+    // Cancel edit mode
+    function cancelEdit() {
+      const form = document.getElementById('doneeForm');
+      form.reset();
+      
+      // Reset submit button
+      const submitBtn = form.querySelector('button[type="submit"]');
+      submitBtn.innerHTML = '➕ Add Donee';
+      submitBtn.className = 'btn btn-primary btn-lg';
+      
+      // Remove hidden input and cancel button
+      const hiddenInput = form.querySelector('input[name="doneeId"]');
+      if (hiddenInput) hiddenInput.remove();
+      
+      const cancelBtn = form.querySelector('.cancel-edit-btn');
+      if (cancelBtn) cancelBtn.remove();
+    }
+
+    // Delete donee
+    async function deleteDonee(doneeId, doneeName) {
+      if (!confirm(`⚠️ Are you sure you want to delete "${doneeName}"?\n\nThis action cannot be undone.`)) {
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/admin/donees/${doneeId}`, {
+          method: 'DELETE'
+        });
+
+        const result = await res.json();
+        
+        if (res.ok) {
+          showAlert('✅ Donee deleted successfully!', 'success');
+          // Reload donees and stats
+          loadDonees(true);
+          loadAdminStats();
+        } else {
+          throw new Error(result.error || 'Failed to delete donee');
+        }
+        
+      } catch (error) {
+        showAlert('❌ Error deleting donee: ' + error.message, 'danger');
+      }
+    }
   </script>
 
   </div> <!-- End of adminContent -->
@@ -302,8 +787,9 @@
     function showAdminContent() {
       document.getElementById('adminContent').style.display = 'block';
       $('#adminLoginModal').modal('hide');
-      // Load stats when admin content is shown
+      // Load stats and donees when admin content is shown
       loadAdminStats();
+      loadDonees(true);
     }
 
     // Admin login form handler
