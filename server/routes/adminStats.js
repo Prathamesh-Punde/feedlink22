@@ -19,8 +19,11 @@ router.post('/login', async (req, res) => {
 
 router.get('/stats', async (req, res) => {
   try {
+    const Donation = require('../models/donation');
+    
     const userCount = await User.countDocuments();
     const doneeCount = await Donee.countDocuments();
+    const donationCount = await Donation.countDocuments();
     
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
@@ -29,10 +32,21 @@ router.get('/stats', async (req, res) => {
       createdAt: { $gte: sevenDaysAgo }
     });
 
+    const recentDonations = await Donation.countDocuments({
+      createdAt: { $gte: sevenDaysAgo }
+    });
+
+    const completedDonations = await Donation.countDocuments({
+      status: 'completed'
+    });
+
     res.json({
       totalUsers: userCount,
       totalDonees: doneeCount,
-      recentUsers: recentUsers
+      recentUsers: recentUsers,
+      totalDonations: donationCount,
+      recentDonations: recentDonations,
+      completedDonations: completedDonations
     });
   } catch (err) {
     res.status(500).json({ error: err.message });

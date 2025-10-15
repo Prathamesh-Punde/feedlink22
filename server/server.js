@@ -29,7 +29,7 @@ const frontendPath = path.join(__dirname, "..", "client");
 console.log("🛠 Serving frontend from:", frontendPath);
 app.use("/api/auth", require("./routes/auth")); 
 app.use("/api/donees/near", require("./routes/nearDonee")); 
-app.use("/api/donees", require("./routes/addDonee"));       
+app.use("/api/donees", require("./routes/donees"));       
 app.use("/api/admin", require("./routes/adminStats"));     
 app.use("/api/donations", require("./routes/donations"));   
 app.use("/", require("./routes/protected")); 

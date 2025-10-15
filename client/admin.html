@@ -186,7 +186,7 @@
 
     <!-- Statistics Cards -->
     <div class="row mb-4">
-      <div class="col-md-4">
+      <div class="col-md-3">
         <div class="card border-0 shadow-sm h-100">
           <div class="card-body text-center">
             <div class="text-primary mb-3">
@@ -197,7 +197,7 @@
           </div>
         </div>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-3">
         <div class="card border-0 shadow-sm h-100">
           <div class="card-body text-center">
             <div class="text-success mb-3">
@@ -208,7 +208,7 @@
           </div>
         </div>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-3">
         <div class="card border-0 shadow-sm h-100">
           <div class="card-body text-center">
             <div class="text-warning mb-3">
@@ -216,6 +216,17 @@
             </div>
             <h3 class="card-title text-warning" id="recentUsers">-</h3>
             <p class="card-text text-muted">New Users (7 days)</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body text-center">
+            <div class="text-info mb-3">
+              <i class="fas fa-heart fa-3x" style="font-size: 3rem;">🍽️</i>
+            </div>
+            <h3 class="card-title text-info" id="totalDonations">-</h3>
+            <p class="card-text text-muted">Total Donations</p>
           </div>
         </div>
       </div>
@@ -228,6 +239,11 @@
           <li class="nav-item" role="presentation">
             <a class="nav-link active" id="manage-tab" data-toggle="pill" href="#manage" role="tab">
               👥 Manage Donees
+            </a>
+          </li>
+          <li class="nav-item" role="presentation">
+            <a class="nav-link" id="pending-tab" data-toggle="pill" href="#pending" role="tab">
+              ⏳ Pending Registrations
             </a>
           </li>
           <li class="nav-item" role="presentation">
@@ -265,6 +281,32 @@
                   <button id="loadMoreBtn" class="btn btn-outline-primary" style="display: none;" onclick="loadMoreDonees()">
                     📄 Load More Donees
                   </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pending Registrations Tab -->
+      <div class="tab-pane fade" id="pending" role="tabpanel">
+        <div class="row">
+          <div class="col-12">
+            <div class="card border-0 shadow">
+              <div class="card-header bg-warning text-dark border-bottom-0">
+                <div class="d-flex justify-content-between align-items-center">
+                  <h5 class="mb-0">⏳ Pending Donee Registrations</h5>
+                  <small>Applications awaiting verification</small>
+                </div>
+              </div>
+              <div class="card-body">
+                <div id="pendingRegistrationsContainer">
+                  <div class="text-center py-5">
+                    <div class="spinner-border text-warning" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                    <p class="mt-3 text-muted">Loading pending registrations...</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -386,25 +428,33 @@
     // Load admin statistics on page load
     async function loadAdminStats() {
       try {
+        // Fetch user and donee stats
         const res = await fetch('/api/admin/stats');
         const stats = await res.json();
         
-        if (res.ok) {
+        // Fetch donation stats
+        const donationRes = await fetch('/api/donations/stats');
+        const donationStats = await donationRes.json();
+        
+        if (res.ok && donationRes.ok) {
           document.getElementById('totalUsers').textContent = stats.totalUsers || 0;
           document.getElementById('totalDonees').textContent = stats.totalDonees || 0;
           document.getElementById('recentUsers').textContent = stats.recentUsers || 0;
+          document.getElementById('totalDonations').textContent = donationStats.totalDonations || 0;
         } else {
-          console.error('Failed to load stats:', stats.error);
+          console.error('Failed to load stats:', stats.error || donationStats.error);
           // Show fallback values
           document.getElementById('totalUsers').textContent = 'Error';
           document.getElementById('totalDonees').textContent = 'Error';
           document.getElementById('recentUsers').textContent = 'Error';
+          document.getElementById('totalDonations').textContent = 'Error';
         }
       } catch (error) {
         console.error('Error fetching admin stats:', error);
         document.getElementById('totalUsers').textContent = 'Error';
         document.getElementById('totalDonees').textContent = 'Error';
         document.getElementById('recentUsers').textContent = 'Error';
+        document.getElementById('totalDonations').textContent = 'Error';
       }
     }
 
@@ -821,9 +871,249 @@
       }
     }
 
+    // ================== PENDING REGISTRATIONS FUNCTIONS ==================
+    
+    // Load pending donee registrations
+    async function loadPendingRegistrations() {
+      try {
+        const res = await fetch('/api/donees?status=pending&limit=50');
+        const pendingDonees = await res.json();
+        
+        if (res.ok) {
+          displayPendingRegistrations(pendingDonees);
+        } else {
+          throw new Error(pendingDonees.error || 'Failed to load pending registrations');
+        }
+      } catch (error) {
+        console.error('Error loading pending registrations:', error);
+        document.getElementById('pendingRegistrationsContainer').innerHTML = `
+          <div class="alert alert-danger">
+            ❌ Error loading pending registrations: ${error.message}
+          </div>
+        `;
+      }
+    }
+
+    // Display pending registrations
+    function displayPendingRegistrations(registrations) {
+      const container = document.getElementById('pendingRegistrationsContainer');
+      
+      if (registrations.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-5">
+            <div class="text-muted mb-4">
+              <i class="fas fa-check-circle fa-4x text-success"></i>
+            </div>
+            <h5 class="text-muted">No Pending Registrations</h5>
+            <p class="text-muted">All donee registrations have been processed!</p>
+          </div>
+        `;
+        return;
+      }
+
+      const registrationCards = registrations.map(registration => `
+        <div class="card mb-4 border-warning" id="registration-${registration._id}">
+          <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="mb-0">🏢 ${registration.organizationName}</h6>
+              <small>Submitted: ${new Date(registration.createdAt).toLocaleDateString()}</small>
+            </div>
+            <div class="btn-group">
+              <button class="btn btn-success btn-sm" onclick="approveRegistration('${registration._id}')">
+                ✅ Approve
+              </button>
+              <button class="btn btn-danger btn-sm" onclick="rejectRegistration('${registration._id}')">
+                ❌ Reject
+              </button>
+              <button class="btn btn-info btn-sm" onclick="viewRegistrationDetails('${registration._id}')" data-toggle="modal" data-target="#registrationDetailsModal">
+                👁️ Details
+              </button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6">
+                <h6 class="text-primary">Contact Information</h6>
+                <p><strong>Contact Person:</strong> ${registration.name}</p>
+                <p><strong>Email:</strong> ${registration.email}</p>
+                <p><strong>Phone:</strong> ${registration.phone}</p>
+                <p><strong>Organization Type:</strong> ${registration.organizationType}</p>
+              </div>
+              <div class="col-md-6">
+                <h6 class="text-primary">Service Information</h6>
+                <p><strong>Address:</strong> ${registration.address}</p>
+                <p><strong>People Served Daily:</strong> ${registration.averagePeopleServed}</p>
+                <p><strong>Operating Hours:</strong> ${registration.operatingHours?.from || 'N/A'} - ${registration.operatingHours?.to || 'N/A'}</p>
+                <p><strong>Special Requirements:</strong> ${registration.specialRequirements?.length ? registration.specialRequirements.join(', ') : 'None'}</p>
+              </div>
+            </div>
+            <div class="row mt-3">
+              <div class="col-12">
+                <h6 class="text-primary">Description</h6>
+                <p class="text-muted">${registration.description}</p>
+              </div>
+            </div>
+            ${registration.documents && registration.documents.length > 0 ? `
+            <div class="row mt-3">
+              <div class="col-12">
+                <h6 class="text-primary">Uploaded Documents</h6>
+                <div class="d-flex flex-wrap gap-2">
+                  ${registration.documents.map(doc => `
+                    <span class="badge badge-secondary">${doc.filename}</span>
+                  `).join('')}
+                </div>
+              </div>
+            </div>
+            ` : ''}
+          </div>
+        </div>
+      `).join('');
+
+      container.innerHTML = registrationCards;
+    }
+
+    // Approve donee registration
+    async function approveRegistration(doneeId) {
+      if (!confirm('Are you sure you want to approve this donee registration?')) return;
+
+      try {
+        const res = await fetch(`/api/donees/${doneeId}/status`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: 'verified' })
+        });
+
+        const result = await res.json();
+        
+        if (res.ok) {
+          showAlert('✅ Registration approved successfully!', 'success');
+          // Remove the card from view
+          const card = document.getElementById(`registration-${doneeId}`);
+          if (card) card.remove();
+          
+          // Check if no more cards left
+          const container = document.getElementById('pendingRegistrationsContainer');
+          if (container.children.length === 0) {
+            loadPendingRegistrations();
+          }
+        } else {
+          throw new Error(result.error || 'Failed to approve registration');
+        }
+      } catch (error) {
+        console.error('Error approving registration:', error);
+        showAlert(`❌ Error approving registration: ${error.message}`, 'danger');
+      }
+    }
+
+    // Reject donee registration  
+    async function rejectRegistration(doneeId) {
+      const reason = prompt('Please provide a reason for rejection (optional):');
+      if (!confirm('Are you sure you want to reject this donee registration?')) return;
+
+      try {
+        const res = await fetch(`/api/donees/${doneeId}/status`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: 'suspended', reason })
+        });
+
+        const result = await res.json();
+        
+        if (res.ok) {
+          showAlert('❌ Registration rejected successfully!', 'warning');
+          // Remove the card from view
+          const card = document.getElementById(`registration-${doneeId}`);
+          if (card) card.remove();
+          
+          // Check if no more cards left
+          const container = document.getElementById('pendingRegistrationsContainer');
+          if (container.children.length === 0) {
+            loadPendingRegistrations();
+          }
+        } else {
+          throw new Error(result.error || 'Failed to reject registration');
+        }
+      } catch (error) {
+        console.error('Error rejecting registration:', error);
+        showAlert(`❌ Error rejecting registration: ${error.message}`, 'danger');
+      }
+    }
+
+    // View registration details in modal
+    async function viewRegistrationDetails(doneeId) {
+      try {
+        const res = await fetch(`/api/donees/${doneeId}`);
+        const donee = await res.json();
+        
+        if (res.ok) {
+          // Populate modal with full details
+          // You can implement a detailed modal here if needed
+          alert(`Detailed view for ${donee.organizationName} - Feature coming soon!`);
+        } else {
+          throw new Error(donee.error || 'Failed to load registration details');
+        }
+      } catch (error) {
+        console.error('Error loading registration details:', error);
+        showAlert(`❌ Error loading details: ${error.message}`, 'danger');
+      }
+    }
+
+    // Helper function to show alerts
+    function showAlert(message, type = 'info') {
+      // Create alert element
+      const alertDiv = document.createElement('div');
+      alertDiv.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+      alertDiv.style.cssText = 'top: 20px; right: 20px; z-index: 9999; max-width: 400px;';
+      alertDiv.innerHTML = `
+        ${message}
+        <button type="button" class="close" data-dismiss="alert">
+          <span>&times;</span>
+        </button>
+      `;
+      
+      // Add to body
+      document.body.appendChild(alertDiv);
+      
+      // Auto remove after 5 seconds
+      setTimeout(() => {
+        if (alertDiv.parentNode) {
+          alertDiv.parentNode.removeChild(alertDiv);
+        }
+      }, 5000);
+    }
+
+    // Load pending count and update tab
+    async function updatePendingCount() {
+      try {
+        const res = await fetch('/api/donees?status=pending&limit=1');
+        const data = await res.json();
+        
+        if (res.ok) {
+          const count = data.length;
+          const pendingTab = document.getElementById('pending-tab');
+          
+          if (count > 0) {
+            pendingTab.innerHTML = `⏳ Pending Registrations <span class="badge badge-warning ml-1">${count}</span>`;
+          } else {
+            pendingTab.innerHTML = '⏳ Pending Registrations';
+          }
+        }
+      } catch (error) {
+        console.error('Error loading pending count:', error);
+      }
+    }
+
+    // Add tab change event listener to load pending registrations when tab is clicked
+    document.addEventListener('click', function(e) {
+      if (e.target && e.target.id === 'pending-tab') {
+        loadPendingRegistrations();
+      }
+    });
+
     // Initialize page
     document.addEventListener('DOMContentLoaded', function() {
       checkAdminAuth();
+      updatePendingCount(); // Load pending registrations count
     });
   </script>
 </body>

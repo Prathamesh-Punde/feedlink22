@@ -32,6 +32,55 @@
         <img src="img/handimg.png" alt="Banner Image" class="img-fluid">
     </section>
 
+    <!-- Impact Statistics Section -->
+    <section class="impact-stats container mt-5 mb-4">
+        <div class="row text-center">
+            <div class="col-12 mb-4">
+                <h2 class="text-primary">🌟 Our Impact Together</h2>
+                <p class="lead text-muted">See how our community is making a difference, one donation at a time</p>
+            </div>
+        </div>
+        <div class="row" id="statsContainer">
+            <div class="col-md-3 col-sm-6 mb-4">
+                <div class="card h-100 border-0 shadow-sm stats-card">
+                    <div class="card-body text-center">
+                        <div class="stats-icon mb-3">🍽️</div>
+                        <h3 class="stats-number text-success" id="totalDonations">-</h3>
+                        <p class="stats-label">Total Donations</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-4">
+                <div class="card h-100 border-0 shadow-sm stats-card">
+                    <div class="card-body text-center">
+                        <div class="stats-icon mb-3">📈</div>
+                        <h3 class="stats-number text-primary" id="thisMonthDonations">-</h3>
+                        <p class="stats-label">This Month</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-12 mb-4">
+                <div class="card h-100 border-0 shadow-sm stats-card">
+                    <div class="card-body text-center">
+                        <div class="stats-icon mb-3">🏆</div>
+                        <h4 class="text-success mb-3">Recent Heroes</h4>
+                        <div id="recentDonors" class="recent-donors-list">
+                            <p class="text-muted">Loading recent donors...</p>
+                        </div>
+                        <p class="stats-label">Thank you for making a difference!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12 text-center">
+                <p class="text-muted">
+                    <small>📊 Last updated: <span id="lastUpdated">Loading...</span></small>
+                </p>
+            </div>
+        </div>
+    </section>
+
     <!-- Donation and Volunteering Section -->
     <section class="info-section container text-center mt-5">
         <div class="row">
@@ -60,23 +109,164 @@
         </div>
     </section>
 
-    <!-- Volunteering Ideas Form -->
-    <section class="ideas-section container text-center mt-5">
-        <div>
-            <img src="img/Rectanglehandimg.png" alt="Volunteering Ideas" class="img-fluid">
-        </div>
-        <div>
-            <h3>Register As A Donee</h3><br>
-            <form id="volunteerForm">
-                <input type="text" id="name" placeholder="Your name" class="form-control mb-2" required><br>
-                <input type="email" id="email" placeholder="Your email" class="form-control mb-2" required><br>
-                <input type="number" id="phone" placeholder="Your phone number" class="form-control mb-2" required><br>
-                <input type="file" id="proposal" class="form-control mb-2" accept=".pdf" required>
-                <small class="form-text text-muted">*plz keep above details handy you will be redirected to google forms </small>
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSfTPd5wrOJQwpWZFcCpYhVYQeb7_GqAcPzyCljUsFIB08vKzQ/viewform?usp=dialog" target="_blank" class="btn btn-primary mt-2">Send</a>
-                <button type="reset" class="btn btn-secondary mt-2">Reset</button>
-                <div id="errorMessage" style="color:red; margin-top:10px;"></div>
-            </form>
+    <!-- Donee Registration Form -->
+    <section class="donee-registration container mt-5">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <div class="card shadow-lg border-0">
+                    <div class="card-header bg-gradient text-white text-center py-4">
+                        <h3 class="mb-0">🏢 Register Your Organization as a Donee</h3>
+                        <p class="mb-0">Join our network to receive food donations from generous donors</p>
+                    </div>
+                    <div class="card-body p-4">
+                        <form id="doneeRegistrationForm" enctype="multipart/form-data">
+                            <!-- Basic Information -->
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <h5 class="text-primary mb-3">📋 Basic Information</h5>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="name" class="form-label">Contact Person Name *</label>
+                                    <input type="text" class="form-control" id="name" name="name" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="email" class="form-label">Email Address *</label>
+                                    <input type="email" class="form-control" id="email" name="email" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="phone" class="form-label">Phone Number *</label>
+                                    <input type="tel" class="form-control" id="phone" name="phone" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="organizationType" class="form-label">Organization Type *</label>
+                                    <select class="form-control" id="organizationType" name="organizationType" required>
+                                        <option value="">Select Type</option>
+                                        <option value="NGO">NGO</option>
+                                        <option value="Orphanage">Orphanage</option>
+                                        <option value="Old Age Home">Old Age Home</option>
+                                        <option value="School">School</option>
+                                        <option value="Hospital">Hospital</option>
+                                        <option value="Community Center">Community Center</option>
+                                        <option value="Religious Organization">Religious Organization</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Organization Details -->
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <h5 class="text-primary mb-3">🏢 Organization Details</h5>
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <label for="organizationName" class="form-label">Organization Name *</label>
+                                    <input type="text" class="form-control" id="organizationName" name="organizationName" required>
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <label for="description" class="form-label">Organization Description *</label>
+                                    <textarea class="form-control" id="description" name="description" rows="3" 
+                                        placeholder="Tell us about your organization's mission and the people you serve..." required></textarea>
+                                    <small class="form-text text-muted">Maximum 1000 characters</small>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="registrationNumber" class="form-label">Registration Number (Optional)</label>
+                                    <input type="text" class="form-control" id="registrationNumber" name="registrationNumber">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="averagePeopleServed" class="form-label">Average People Served Daily *</label>
+                                    <input type="number" class="form-control" id="averagePeopleServed" name="averagePeopleServed" min="1" required>
+                                </div>
+                            </div>
+
+                            <!-- Location Information -->
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <h5 class="text-primary mb-3">📍 Location Information</h5>
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <label for="street" class="form-label">Street Address *</label>
+                                    <input type="text" class="form-control" id="street" name="street" required>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="city" class="form-label">City *</label>
+                                    <input type="text" class="form-control" id="city" name="city" required>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="state" class="form-label">State *</label>
+                                    <input type="text" class="form-control" id="state" name="state" required>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="zipCode" class="form-label">ZIP Code *</label>
+                                    <input type="text" class="form-control" id="zipCode" name="zipCode" required>
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <button type="button" class="btn btn-outline-primary" id="getLocationBtn">
+                                        📍 Use Current Location
+                                    </button>
+                                    <small class="form-text text-muted d-block mt-1">
+                                        This helps donors find you more easily
+                                    </small>
+                                </div>
+                            </div>
+
+                            <!-- Operating Information -->
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <h5 class="text-primary mb-3">⏰ Operating Information</h5>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="operatingHoursFrom" class="form-label">Operating Hours From *</label>
+                                    <input type="time" class="form-control" id="operatingHoursFrom" name="operatingHoursFrom" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="operatingHoursTo" class="form-label">Operating Hours To *</label>
+                                    <input type="time" class="form-control" id="operatingHoursTo" name="operatingHoursTo" required>
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <label for="specialRequirements" class="form-label">Special Food Requirements (Optional)</label>
+                                    <input type="text" class="form-control" id="specialRequirements" name="specialRequirements" 
+                                        placeholder="e.g., Vegetarian Only, Halal Required, No Spicy Food (separate with commas)">
+                                </div>
+                            </div>
+
+                            <!-- Documents -->
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <h5 class="text-primary mb-3">📄 Documents (Optional)</h5>
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <label for="documents" class="form-label">Upload Supporting Documents</label>
+                                    <input type="file" class="form-control" id="documents" name="documents" multiple 
+                                        accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+                                    <small class="form-text text-muted">
+                                        You can upload registration certificates, ID proof, etc. (Max 5MB each)
+                                    </small>
+                                </div>
+                            </div>
+
+                            <!-- Hidden fields for coordinates -->
+                            <input type="hidden" id="latitude" name="latitude">
+                            <input type="hidden" id="longitude" name="longitude">
+
+                            <!-- Submit Buttons -->
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <button type="submit" class="btn btn-primary btn-lg px-5 me-3" id="submitBtn">
+                                        <span class="spinner-border spinner-border-sm d-none" id="submitSpinner"></span>
+                                        📝 Submit Registration
+                                    </button>
+                                    <button type="reset" class="btn btn-outline-secondary btn-lg px-5">
+                                        🔄 Reset Form
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Success/Error Messages -->
+                            <div id="formMessage" class="mt-3"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 <br><br>
@@ -115,6 +305,352 @@
     </footer>
 
     <script src="script.js"></script>
+    
+    <style>
+        .stats-card {
+            transition: all 0.3s ease;
+            border-radius: 15px;
+        }
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+        }
+        .stats-icon {
+            font-size: 2.5rem;
+        }
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 0;
+        }
+        .stats-label {
+            color: #6c757d;
+            font-weight: 500;
+            margin: 0;
+        }
+        .impact-stats {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+        }
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-number {
+            animation: countUp 0.8s ease-out;
+        }
+        
+        /* Donee Registration Form Styles */
+        .donee-registration {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+        }
+        .bg-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card {
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .btn-outline-primary {
+            border-color: #667eea;
+            color: #667eea;
+            border-radius: 25px;
+        }
+        .btn-outline-primary:hover {
+            background: #667eea;
+            border-color: #667eea;
+        }
+        .form-label {
+            font-weight: 600;
+            color: #495057;
+        }
+        .alert-success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            border: none;
+            color: white;
+            border-radius: 10px;
+        }
+        .alert-danger {
+            background: linear-gradient(135deg, #dc3545 0%, #fd7e14 100%);
+            border: none;
+            color: white;
+            border-radius: 10px;
+        }
+        
+        /* Recent Donors Styles */
+        .recent-donors-list {
+            max-height: 120px;
+            overflow-y: auto;
+        }
+        .donor-item {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 8px;
+            padding: 8px 12px;
+            margin: 5px 0;
+            border-left: 4px solid #28a745;
+        }
+        .donor-name {
+            font-weight: 600;
+            color: #495057;
+            font-size: 14px;
+        }
+        .donor-date {
+            font-size: 11px;
+            color: #6c757d;
+        }
+        .no-donors {
+            color: #6c757d;
+            font-style: italic;
+            padding: 20px 0;
+        }
+    </style>
+
+    <script>
+        // Load donation statistics on page load
+        async function loadDonationStats() {
+            try {
+                const response = await fetch('/api/donations/stats');
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Animate numbers counting up
+                    animateNumber('totalDonations', data.totalDonations);
+                    animateNumber('thisMonthDonations', data.thisMonthDonations);
+                    
+                    // Display recent donors
+                    displayRecentDonors(data.lastThreeDonors);
+                    
+                    document.getElementById('lastUpdated').textContent = new Date().toLocaleString();
+                } else {
+                    console.error('Failed to load donation stats');
+                    // Show fallback numbers
+                    document.getElementById('totalDonations').textContent = '100+';
+                    document.getElementById('thisMonthDonations').textContent = '25+';
+                    displayRecentDonors([]);
+                }
+            } catch (error) {
+                console.error('Error loading donation stats:', error);
+                // Show inspirational fallback numbers
+                document.getElementById('totalDonations').textContent = '100+';
+                document.getElementById('thisMonthDonations').textContent = '25+';
+                displayRecentDonors([]);
+            }
+        }
+
+        function displayRecentDonors(donors) {
+            const recentDonorsDiv = document.getElementById('recentDonors');
+            
+            if (!donors || donors.length === 0) {
+                recentDonorsDiv.innerHTML = '<p class="no-donors">No recent confirmed donations yet.<br>Be the first to make a difference!</p>';
+                return;
+            }
+            
+            const donorsHtml = donors.map(donor => {
+                const date = new Date(donor.date);
+                const timeAgo = getTimeAgo(date);
+                
+                return `
+                    <div class="donor-item">
+                        <div class="donor-name">🎖️ ${donor.name}</div>
+                        <div class="donor-date">${timeAgo}</div>
+                    </div>
+                `;
+            }).join('');
+            
+            recentDonorsDiv.innerHTML = donorsHtml;
+        }
+
+        function getTimeAgo(date) {
+            const now = new Date();
+            const diffTime = Math.abs(now - date);
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            const diffHours = Math.floor(diffTime / (1000 * 60 * 60));
+            
+            if (diffDays > 0) {
+                return diffDays === 1 ? '1 day ago' : `${diffDays} days ago`;
+            } else if (diffHours > 0) {
+                return diffHours === 1 ? '1 hour ago' : `${diffHours} hours ago`;
+            } else {
+                return 'Just now';
+            }
+        }
+
+        function animateNumber(elementId, finalValue, suffix = '') {
+            const element = document.getElementById(elementId);
+            const startValue = 0;
+            const duration = 2000; // 2 seconds
+            const startTime = performance.now();
+
+            function updateNumber(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                // Easing function for smooth animation
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+                const currentValue = Math.floor(startValue + (finalValue - startValue) * easeOut);
+                
+                element.textContent = currentValue + suffix;
+                element.classList.add('animate-number');
+                
+                if (progress < 1) {
+                    requestAnimationFrame(updateNumber);
+                }
+            }
+            
+            requestAnimationFrame(updateNumber);
+        }
+
+        // Load stats when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDonationStats();
+            initializeDoneeForm();
+        });
+        
+        // Refresh stats every 5 minutes
+        setInterval(loadDonationStats, 300000);
+
+        // Donee Registration Form Functions
+        function initializeDoneeForm() {
+            const form = document.getElementById('doneeRegistrationForm');
+            const getLocationBtn = document.getElementById('getLocationBtn');
+            const submitBtn = document.getElementById('submitBtn');
+            const submitSpinner = document.getElementById('submitSpinner');
+
+            // Get current location
+            getLocationBtn.addEventListener('click', function() {
+                if (navigator.geolocation) {
+                    getLocationBtn.disabled = true;
+                    getLocationBtn.innerHTML = '⏳ Getting Location...';
+                    
+                    navigator.geolocation.getCurrentPosition(
+                        function(position) {
+                            document.getElementById('latitude').value = position.coords.latitude;
+                            document.getElementById('longitude').value = position.coords.longitude;
+                            getLocationBtn.innerHTML = '✅ Location Captured';
+                            getLocationBtn.classList.replace('btn-outline-primary', 'btn-success');
+                        },
+                        function(error) {
+                            console.error('Geolocation error:', error);
+                            getLocationBtn.innerHTML = '❌ Location Failed';
+                            getLocationBtn.classList.replace('btn-outline-primary', 'btn-danger');
+                            getLocationBtn.disabled = false;
+                            showMessage('Location access denied. You can continue without it.', 'warning');
+                        }
+                    );
+                } else {
+                    showMessage('Geolocation is not supported by this browser.', 'warning');
+                }
+            });
+
+            // Form submission
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                // Show loading state
+                submitBtn.disabled = true;
+                submitSpinner.classList.remove('d-none');
+                
+                try {
+                    const formData = new FormData(form);
+                    
+                    // Add full address
+                    const street = formData.get('street');
+                    const city = formData.get('city');
+                    const state = formData.get('state');
+                    const zipCode = formData.get('zipCode');
+                    formData.append('address', `${street}, ${city}, ${state} ${zipCode}`);
+                    
+                    const response = await fetch('/api/donees/register', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        showMessage(
+                            '🎉 Registration submitted successfully! You will be notified once verified by our admin team.',
+                            'success'
+                        );
+                        form.reset();
+                        
+                        // Reset location button
+                        getLocationBtn.innerHTML = '📍 Use Current Location';
+                        getLocationBtn.classList.remove('btn-success', 'btn-danger');
+                        getLocationBtn.classList.add('btn-outline-primary');
+                        getLocationBtn.disabled = false;
+                        
+                    } else {
+                        showMessage(`❌ Registration failed: ${result.error}`, 'danger');
+                    }
+                } catch (error) {
+                    console.error('Registration error:', error);
+                    showMessage('❌ Network error. Please check your connection and try again.', 'danger');
+                } finally {
+                    // Reset button state
+                    submitBtn.disabled = false;
+                    submitSpinner.classList.add('d-none');
+                }
+            });
+
+            // Character count for description
+            const description = document.getElementById('description');
+            description.addEventListener('input', function() {
+                const remaining = 1000 - this.value.length;
+                const help = this.nextElementSibling;
+                help.textContent = `${remaining} characters remaining`;
+                
+                if (remaining < 0) {
+                    help.classList.add('text-danger');
+                    this.classList.add('is-invalid');
+                } else {
+                    help.classList.remove('text-danger');
+                    this.classList.remove('is-invalid');
+                }
+            });
+        }
+
+        function showMessage(message, type) {
+            const messageDiv = document.getElementById('formMessage');
+            messageDiv.innerHTML = `
+                <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+            
+            // Scroll to message
+            messageDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // Auto hide after 5 seconds for success messages
+            if (type === 'success') {
+                setTimeout(() => {
+                    const alert = messageDiv.querySelector('.alert');
+                    if (alert) {
+                        alert.classList.remove('show');
+                        setTimeout(() => messageDiv.innerHTML = '', 150);
+                    }
+                }, 5000);
+            }
+        }
+    </script>
 
 </body>
 
