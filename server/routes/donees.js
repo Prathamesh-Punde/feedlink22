@@ -5,29 +5,27 @@ const multer = require('multer');
 const path = require('path');
 const { sendDoneeVerificationEmail, sendDoneeRejectionEmail } = require('../utils/mailer');
 
-// Configure multer for file uploads
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/') // Make sure this directory exists
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
-  }
-});
-
+// Configure multer for memory storage (Base64 conversion)
 const upload = multer({ 
-  storage: storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+  storage: multer.memoryStorage(),
+  limits: { 
+    fileSize: 5 * 1024 * 1024, // 5MB limit per file
+    files: 5
+  },
   fileFilter: (req, file, cb) => {
-    const allowedTypes = /jpeg|jpg|png|pdf|doc|docx/;
-    const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-    const mimetype = allowedTypes.test(file.mimetype);
+    const allowedTypes = [
+      'image/jpeg',
+      'image/jpg', 
+      'image/png',
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    ];
     
-    if (mimetype && extname) {
+    if (allowedTypes.includes(file.mimetype)) {
       return cb(null, true);
     } else {
-      cb(new Error('Only images and documents are allowed'));
+      cb(new Error('Only images and PDF/Word documents are allowed'));
     }
   }
 });
@@ -70,12 +68,19 @@ router.post('/register', upload.array('documents', 5), async (req, res) => {
         : specialRequirements;
     }
 
-    // Process uploaded documents
-    const documents = req.files ? req.files.map(file => ({
-      type: 'other', // You can enhance this to detect document type
-      filename: file.filename,
-      uploadDate: new Date()
-    })) : [];
+    // Process uploaded files - convert to Base64
+    const documents = [];
+    if (req.files && req.files.length > 0) {
+      req.files.forEach(file => {
+        documents.push({
+          fileName: file.originalname,
+          fileType: file.mimetype,
+          fileSize: file.size,
+          fileData: file.buffer.toString('base64'), // Convert to Base64
+          uploadedAt: new Date()
+        });
+      });
+    }
 
     // Create donee object
     const doneeData = {
@@ -267,6 +272,40 @@ router.get('/nearby/:longitude/:latitude', async (req, res) => {
   } catch (error) {
     console.error('Error finding nearby donees:', error);
     res.status(500).json({ error: 'Failed to find nearby donees' });
+  }
+});
+
+// Download/view document
+router.get('/:id/document/:docIndex', async (req, res) => {
+  try {
+    const donee = await Donee.findById(req.params.id);
+    
+    if (!donee) {
+      return res.status(404).json({ error: 'Donee not found' });
+    }
+
+    const docIndex = parseInt(req.params.docIndex);
+    if (!donee.documents || !donee.documents[docIndex]) {
+      return res.status(404).json({ error: 'Document not found' });
+    }
+
+    const doc = donee.documents[docIndex];
+    
+    // Convert Base64 back to buffer
+    const fileBuffer = Buffer.from(doc.fileData, 'base64');
+    
+    // Set headers for inline viewing/download
+    res.set({
+      'Content-Type': doc.fileType,
+      'Content-Disposition': `inline; filename="${doc.fileName}"`,
+      'Content-Length': fileBuffer.length
+    });
+    
+    res.send(fileBuffer);
+
+  } catch (error) {
+    console.error('Document download error:', error);
+    res.status(500).json({ error: 'Failed to retrieve document' });
   }
 });
 

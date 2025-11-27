@@ -56,9 +56,11 @@ const doneeSchema = new mongoose.Schema({
   // Documents
   registrationNumber: String,
   documents: [{
-    type: { type: String, enum: ['registration_certificate', 'id_proof', 'address_proof', 'other'] },
-    filename: String,
-    uploadDate: { type: Date, default: Date.now }
+    fileName: String,
+    fileType: String,
+    fileSize: Number,
+    fileData: String,  // Base64 encoded
+    uploadedAt: { type: Date, default: Date.now }
   }],
   
   // Statistics (keeping backward compatibility)

@@ -956,20 +956,38 @@
             ${registration.documents && registration.documents.length > 0 ? `
             <div class="row mt-3">
               <div class="col-12">
-                <h6 class="text-primary">Uploaded Documents</h6>
-                <div class="d-flex flex-wrap gap-2">
-                  ${registration.documents.map(doc => `
-                    <span class="badge badge-secondary">${doc.filename}</span>
+                <h6 class="text-primary">📄 Uploaded Documents</h6>
+                <div class="document-list">
+                  ${registration.documents.map((doc, index) => `
+                    <div class="mb-2 d-inline-block mr-2">
+                      <button class="btn btn-sm btn-outline-primary" onclick="viewDocument('${registration._id}', ${index})" title="${doc.fileName}">
+                        <i class="fas fa-file-alt"></i> ${doc.fileName} 
+                        <small class="text-muted">(${(doc.fileSize / 1024).toFixed(1)} KB)</small>
+                      </button>
+                    </div>
                   `).join('')}
                 </div>
               </div>
             </div>
-            ` : ''}
+            ` : `
+            <div class="row mt-3">
+              <div class="col-12">
+                <h6 class="text-primary">📄 Uploaded Documents</h6>
+                <p class="text-muted">No documents uploaded</p>
+              </div>
+            </div>
+            `}
           </div>
         </div>
       `).join('');
 
       container.innerHTML = registrationCards;
+    }
+
+    // View document in new tab
+    function viewDocument(doneeId, docIndex) {
+      const url = `/api/donees/${doneeId}/document/${docIndex}`;
+      window.open(url, '_blank');
     }
 
     // Approve donee registration
