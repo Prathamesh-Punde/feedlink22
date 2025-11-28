@@ -40,3 +40,8 @@
 
 6. **Access the application**
    Open your browser and go to: `http://localhost:5000`
+
+## 📽️ Project Demo
+
+[![Project Demo Video](https://img.shields.io/badge/Watch-Demo-red?logo=youtube&style=for-the-badge)](https://drive.google.com/file/d/1W4ftbY9oDXhZ6lr2yi-NLKluUn0esxXr/view?usp=sharing)
+
